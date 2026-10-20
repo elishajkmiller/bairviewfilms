@@ -66,7 +66,7 @@ def page(title, desc, body, depth=0, active=""):
 
 
 def card(f):
-    poster = img(f["slug"], "poster")
+    poster = img(f["slug"], "poster") or img(f["slug"], "still")
     art = (
         f'<img src="{poster}" alt="{esc(f["title"])} poster" loading="lazy">'
         if poster
@@ -105,6 +105,10 @@ for f in films:
     still = img(f["slug"], "still")
     bg = f" style=\"background-image:url('../{still}')\"" if still else ""
     cast = ", ".join(esc(x) for x in f["cast"])
+    def embed(label, vid):
+        return (f'<h2>{label}</h2>\n  <div class="video"><iframe src="https://www.youtube-nocookie.com/embed/{vid}" '
+                f'title="{esc(f["title"])} {label}" loading="lazy" allowfullscreen></iframe></div>')
+    videos = embed("Trailer", f["trailer_video"]) + "\n  " + embed("Watch the Film", f["film_video"])
     laurels = "\n".join(f"    <li>{esc(x)}</li>" for x in f["laurels"])
     write(f"films/{f['slug']}.html", page(
         f"{f['title']} | Bairview Films", f["logline"], f"""<section class="hero short"{bg}>
@@ -116,6 +120,7 @@ for f in films:
 </section>
 <section class="wrap narrow">
   <p class="logline">{esc(f['logline'])}</p>
+  {videos}
   <h2>Starring</h2>
   <p>{cast}</p>
   <h2>Official Selections</h2>

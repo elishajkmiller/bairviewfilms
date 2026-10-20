@@ -6,12 +6,15 @@
     "owner": "Kaleb Fobair",
     "roles": "Director | Cinematographer | Writer | Producer",
     "socials": [
-      { "label": "YouTube", "url": "https://www.youtube.com/@BairViewFilms" }
+      {
+        "label": "YouTube",
+        "url": "https://www.youtube.com/@BairViewFilms"
+      }
     ]
   },
   "about": [
-    "Bairview Films is the production banner of filmmaker Kaleb Fobair. Every film here was written, shot and produced under it.",
-    "The work leans into genre: tense family drama, regional horror and quiet end-of-the-world stories."
+    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+    "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
   ],
   "films": [
     {
@@ -22,12 +25,19 @@
       "year": 2025,
       "status": "Festival Circuit",
       "logline": "Two brothers in a ruined world capture a mysterious woman called a \"Lost One.\"",
-      "cast": ["Gavin Miller", "Jachin Liké", "Lauren Holloway", "Sky Wolfe"],
+      "cast": [
+        "Gavin Miller",
+        "Jachin Liké",
+        "Lauren Holloway",
+        "Sky Wolfe"
+      ],
       "laurels": [
         "Queen City Shout 2026 (including Best Lead Actor)",
         "Bird Watching International Film Festival 2025",
         "Fault Line 2026"
-      ]
+      ],
+      "film_video": "t8J93DdeEGc",
+      "trailer_video": "bgR_CeKLuIU"
     },
     {
       "slug": "roadkill",
@@ -37,11 +47,21 @@
       "year": 2024,
       "status": "Festival Circuit",
       "logline": "A documentary crew investigates a Missouri cryptid tied to disappearances.",
-      "cast": ["Yaya Like", "Ethan Beattie", "Izzy Hill", "Sky Wolfe", "Lydia Caswell", "Zac Cox", "Gavin Miller"],
+      "cast": [
+        "Yaya Like",
+        "Ethan Beattie",
+        "Izzy Hill",
+        "Sky Wolfe",
+        "Lydia Caswell",
+        "Zac Cox",
+        "Gavin Miller"
+      ],
       "laurels": [
         "Creature Feature Weekend 2025 (Official Selection and Honorable Mention)",
         "The Andys 2026"
-      ]
+      ],
+      "film_video": "QhcGdsKC2G8",
+      "trailer_video": "oI23hTnFfkw"
     },
     {
       "slug": "room-10",
@@ -51,12 +71,19 @@
       "year": 2024,
       "status": "Festival Circuit",
       "logline": "Newlyweds inherit a run-down family motel, and outlaw guests expose mistrust in their marriage.",
-      "cast": ["Isabelle Bates", "Austin Saylor", "Gavin Miller", "Nathan Brown"],
+      "cast": [
+        "Isabelle Bates",
+        "Austin Saylor",
+        "Gavin Miller",
+        "Nathan Brown"
+      ],
       "laurels": [
         "Fault Line 2025",
         "Kansas City FilmFest 2025 (Best Heartland College Student Short)",
         "BisonBison 2026"
-      ]
+      ],
+      "film_video": "WqRbVnFbb8s",
+      "trailer_video": "mk46OSJkbHg"
     }
   ]
 }
