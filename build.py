@@ -58,7 +58,7 @@ def page(title, desc, body, depth=0, active=""):
 <footer>
   <div class="foot-brand">Bairview Films</div>
   <div class="foot-links">{socials}<a href="mailto:{esc(site['email'])}">Email</a></div>
-  <div class="foot-small">&copy; {date.today().year} Bairview Films. {esc(site['roles'])}.</div>
+  <div class="foot-small">&copy; {date.today().year} Bairview Films.</div>
 </footer>
 </body>
 </html>
