@@ -75,9 +75,10 @@ def facts(f):
 
 
 def card(f):
-    poster = exists(f"assets/posters/{f['slug']}.jpg") or exists(f"assets/{f['slug']}-still.jpg")
+    real = exists(f"assets/posters/{f['slug']}.jpg")
+    poster = real or exists(f"assets/{f['slug']}-still.jpg")
     art = (
-        f'<img src="{poster}" alt="{esc(f["title"])} poster" loading="lazy">'
+        f'<img{" class=\"whole\"" if real else ""} src="{poster}" alt="{esc(f["title"])} poster" loading="lazy">'
         if poster
         else f'<div class="ph"><span>{esc(f["title"])}</span></div>'
     )
