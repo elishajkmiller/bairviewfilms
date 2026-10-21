@@ -94,7 +94,8 @@ write("index.html", page(
     <source src="assets/reel.mp4" type="video/mp4">
   </video>
 </section>
-<section id="films" class="wrap">
+<div class="stage"></div>
+<section id="films" class="wrap over">
   <h2>Films</h2>
   <div class="grid">
 {chr(10).join(card(f) for f in films)}
