@@ -45,6 +45,7 @@ def page(title, desc, body, depth=0, active=""):
 <meta property="og:image" content="{site['url']}/assets/reel-poster.jpg">
 <link rel="icon" type="image/png" href="{r}assets/favicon.png">
 <link rel="stylesheet" href="{r}style.css">
+<script>if ("scrollRestoration" in history) history.scrollRestoration = "manual";</script>
 </head>
 <body>
 <header class="top">
