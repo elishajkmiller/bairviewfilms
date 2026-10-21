@@ -87,10 +87,10 @@ def card(f):
 </a>"""
 
 
-# Home: the brand reel opens the page, the films follow
+# Home: the reel plays behind the films
 write("index.html", page(
     "Bairview Films", site["tagline"], f"""<section class="reel">
-  <video autoplay muted loop playsinline preload="auto" poster="assets/reel-poster.jpg" aria-label="Bairview Films logo animation">
+  <video autoplay muted loop playsinline preload="auto" aria-hidden="true">
     <source src="assets/reel.mp4" type="video/mp4">
   </video>
 </section>
