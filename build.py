@@ -150,10 +150,23 @@ for f in films:
     shots = sorted(glob.glob(f"assets/stills/{slug}-*.jpg"))
     gallery = ""
     if shots:
-        tiles = "\n".join(
-            f'    <a href="../{p}"><img src="../{p}" alt="{esc(f["title"])} still {i}" loading="lazy"></a>'
+        slides = "\n".join(
+            f'      <img{" class=\"on\"" if i == 1 else ""} src="../{p}" alt="{esc(f["title"])} still {i}" loading="{"eager" if i == 1 else "lazy"}">'
             for i, p in enumerate(shots, 1))
-        gallery = f'<section class="wrap"><h2>Stills</h2>\n  <div class="gallery">\n{tiles}\n  </div></section>'
+        dots = "<i class=\"on\"></i>" + "<i></i>" * (len(shots) - 1)
+        arrows = (
+            '<button type="button" class="car-nav car-prev" aria-label="Previous still">&lsaquo;</button>'
+            '<button type="button" class="car-nav car-next" aria-label="Next still">&rsaquo;</button>'
+            f'<span class="car-dots">{dots}</span>') if len(shots) > 1 else ""
+        gallery = f"""<section class="wrap car-sec"><h2>Stills</h2>
+  <div class="car" role="region" aria-roledescription="carousel" aria-label="{esc(f['title'])} stills">
+    <div class="car-frame" tabindex="0">
+      <div class="car-bg" style="background-image:url('../{shots[0]}')"></div>
+{slides}
+      {arrows}
+    </div>
+  </div>
+  <script src="../carousel.js" defer></script></section>"""
 
     write(f"films/{slug}.html", page(
         f"{f['title']} | Bairview Films", f.get("logline") or f"{f['title']}, a Bairview Films production.",
