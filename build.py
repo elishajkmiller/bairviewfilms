@@ -9,6 +9,7 @@ from html import escape as esc
 from datetime import date
 
 c = json.load(open("content.json", encoding="utf-8"))
+colors = json.load(open("assets/colors.json")) if os.path.exists("assets/colors.json") else {}
 site, films = c["site"], c["films"]
 os.makedirs("films", exist_ok=True)
 
@@ -153,7 +154,7 @@ for f in films:
                     f'        <button type="button" class="rail-t" data-i="{i}"{extra if dup else f" aria-label=\"Open still {i}\""}>'
                     f'<img src="../{p}" alt="" loading="lazy"></button>'
                     for i, p in enumerate(shots))
-            reel = f"""<div class="rail" style="--dur:{len(shots) * 6}s" role="region" aria-label="{esc(f['title'])} stills">
+            reel = f"""<div class="rail" style="--dur:{len(shots) * 6}s;--avg:{colors.get(slug, "#2a2a2a")}" role="region" aria-label="{esc(f['title'])} stills">
       <div class="rail-track">
 {tiles(False)}
 {tiles(True)}

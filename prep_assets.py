@@ -2,6 +2,7 @@
 Run: python3 -I prep_assets.py <extracted "BairView Assets " folder> <folder with reel.mp4 and reel-poster.jpg>
 Selection lists are by timestamp or name fragment so the originals can stay untouched."""
 import glob
+import json
 import os
 import re
 import shutil
@@ -117,3 +118,13 @@ for slug, d in LAUREL_DIRS.items():
         name = re.sub(r"[^a-z0-9]+", "-", stem.lower()).strip("-")
         save_png(f, f"{out}/laurels/{slug}--{name}.png", 360)
         print(slug, name)
+
+# Average color of each film's stills, used for the reel border
+colors = {}
+for slug in GALLERY:
+    px = [Image.open(f).convert("RGB").resize((1, 1), Image.BOX).getpixel((0, 0))
+          for f in sorted(glob.glob(f"{out}/stills/{slug}-*.jpg"))]
+    avg = tuple(round(sum(c[i] for c in px) / len(px)) for i in range(3))
+    colors[slug] = "#%02x%02x%02x" % avg
+json.dump(colors, open(f"{out}/colors.json", "w"), indent=2)
+print(colors)

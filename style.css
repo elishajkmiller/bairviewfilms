@@ -80,7 +80,7 @@ footer { background:rgba(10,10,10,.55); border-top:1px solid var(--line); paddin
 .strip-row .poster { flex:none; width:200px; height:300px; object-fit:cover; display:block; }
 .rail { flex:1; min-width:0; overflow:hidden; height:300px; }
 .rail-track { display:flex; height:100%; width:max-content; animation:rail-run var(--dur,60s) linear infinite; }
-.rail-t { flex:none; width:300px; height:100%; padding:0; border:3px solid #2a2a2a; background:#111; cursor:zoom-in; }
+.rail-t { flex:none; width:300px; height:100%; padding:0; border:3px solid var(--avg,#2a2a2a); background:#111; cursor:zoom-in; }
 .rail-t:focus-visible { outline:3px solid var(--accent); outline-offset:-3px; }
 .rail-t img { width:100%; height:100%; object-fit:cover; display:block; }
 @keyframes rail-run { to { transform:translateX(-50%); } }
