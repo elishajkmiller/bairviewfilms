@@ -94,10 +94,6 @@ write("index.html", page(
     <source src="assets/reel.mp4" type="video/mp4">
   </video>
 </section>
-<section class="intro">
-  <p>{esc(site['tagline'])}</p>
-  <a class="btn" href="#films">View Films</a>
-</section>
 <section id="films" class="wrap">
   <h2>Films</h2>
   <div class="grid">

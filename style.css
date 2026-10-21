@@ -43,8 +43,6 @@ footer { border-top:1px solid var(--line); padding:48px 4vw; display:grid; gap:1
 .brand img { display:block; height:34px; width:auto; }
 .reel { background:#000; }
 .reel video { display:block; width:100%; max-height:82vh; aspect-ratio:16/9; object-fit:cover; }
-.intro { text-align:center; padding:7vh 4vw 0; }
-.intro p { font-size:clamp(1.1rem,2.4vw,1.5rem); letter-spacing:.04em; }
 .film-top { display:grid; grid-template-columns:200px 1fr; gap:32px; align-items:start; margin-bottom:8px; }
 .film-top:not(:has(.poster)) { grid-template-columns:1fr; }
 .poster { width:100%; display:block; }
