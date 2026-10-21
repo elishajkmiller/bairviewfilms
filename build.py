@@ -119,8 +119,6 @@ for f in films:
 
     if f.get("logline"):
         parts.append(f'<p class="logline">{esc(f["logline"])}</p>')
-    if f.get("links"):
-        parts.append(f'<p class="ext">{link_list(f["links"])}</p>')
 
     for label, key in (("Trailer", "trailer_video"), ("Watch the Film", "film_video")):
         if f.get(key):
@@ -144,7 +142,9 @@ for f in films:
     shots = sorted(glob.glob(f"assets/stills/{slug}-*.jpg"))
     row = ""
     if poster or shots:
-        art = f'<img class="poster" src="../{poster}" alt="{esc(f["title"])} poster">' if poster else ""
+        ext = f'<p class="ext">{link_list(f["links"])}</p>' if f.get("links") else ""
+        art = (f'<div class="poster-col"><img class="poster" src="../{poster}" alt="{esc(f["title"])} poster">{ext}</div>'
+               if poster else "")
         reel = ""
         if shots:
             def tiles(dup):
@@ -164,6 +164,7 @@ for f in films:
     {art}
     {reel}
   </div>
+  {"" if poster else ext}
   <script src="../carousel.js" defer></script>
 </section>"""
 
@@ -179,8 +180,8 @@ for f in films:
 {row}
 <section class="wrap narrow">
   {chr(10).join(parts)}
-  <p><a class="btn ghost" href="../index.html">All Films</a></p>
-</section>""", depth=1, active="films"))
+</section>
+<div class="wrap back"><a class="btn ghost" href="../index.html">Back to Films</a></div>""", depth=1, active="films"))
 
 # About
 paras = "\n".join(f"    <p>{esc(p)}</p>" for p in c["about"])
