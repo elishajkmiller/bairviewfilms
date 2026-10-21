@@ -121,6 +121,8 @@ for f in films:
 
     if f.get("logline"):
         parts.append(f'<p class="logline">{esc(f["logline"])}</p>')
+    if f.get("synopsis"):
+        parts.append(f'<p>{esc(f["synopsis"])}</p>')
 
     for label, key in (("Trailer", "trailer_video"), ("Watch the Film", "film_video")):
         if f.get(key):
