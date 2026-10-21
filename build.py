@@ -1,6 +1,8 @@
 """Static site generator. Run: python3 build.py
 Reads content.json, writes index.html, about.html, contact.html and films/*.html.
-Drop images in assets/ as <slug>-poster.jpg and <slug>-still.jpg to use them."""
+Images come from assets/ (see prep_assets.py):
+  <slug>-still.jpg, posters/<slug>.jpg, stills/<slug>-NN.jpg, laurels/<slug>--<award>.png"""
+import glob
 import json
 import os
 from html import escape as esc
@@ -11,14 +13,17 @@ site, films = c["site"], c["films"]
 os.makedirs("films", exist_ok=True)
 
 
-def img(slug, kind):
-    path = f"assets/{slug}-{kind}.jpg"
+def exists(path):
     return path if os.path.exists(path) else None
 
 
 def write(path, text):
     with open(path, "w", encoding="utf-8") as f:
         f.write(text)
+
+
+def link_list(items):
+    return "".join(f'<a href="{esc(x["url"])}" rel="noopener">{esc(x["label"])}</a>' for x in items)
 
 
 def page(title, desc, body, depth=0, active=""):
@@ -28,10 +33,6 @@ def page(title, desc, body, depth=0, active=""):
         cur = ' aria-current="page"' if active == key else ""
         return f'<a href="{r}{href}"{cur}>{label}</a>'
 
-    socials = "".join(
-        f'<a href="{esc(s["url"])}" rel="noopener">{esc(s["label"])}</a>'
-        for s in site["socials"]
-    )
     return f"""<!doctype html>
 <html lang="en">
 <head>
@@ -41,11 +42,13 @@ def page(title, desc, body, depth=0, active=""):
 <meta name="description" content="{esc(desc)}">
 <meta property="og:title" content="{esc(title)}">
 <meta property="og:description" content="{esc(desc)}">
+<meta property="og:image" content="{site['url']}/assets/reel-poster.jpg">
+<link rel="icon" type="image/png" href="{r}assets/favicon.png">
 <link rel="stylesheet" href="{r}style.css">
 </head>
 <body>
 <header class="top">
-  <a class="brand" href="{r}index.html">Bairview Films</a>
+  <a class="brand" href="{r}index.html"><img src="{r}assets/logo.png" alt="Bairview Films"></a>
   <nav>
     {link('index.html#films', 'Films', 'films')}
     {link('about.html', 'About', 'about')}
@@ -56,8 +59,8 @@ def page(title, desc, body, depth=0, active=""):
 {body}
 </main>
 <footer>
-  <div class="foot-brand">Bairview Films</div>
-  <div class="foot-links">{socials}<a href="mailto:{esc(site['email'])}">Email</a></div>
+  <img class="foot-bear" src="{r}assets/bear.png" alt="">
+  <div class="foot-links">{link_list(site['socials'])}<a href="mailto:{esc(site['email'])}">Email</a></div>
   <div class="foot-small">&copy; {date.today().year} Bairview Films.</div>
 </footer>
 </body>
@@ -65,77 +68,123 @@ def page(title, desc, body, depth=0, active=""):
 """
 
 
+def facts(f):
+    return " &middot; ".join(esc(str(f[k])) for k in ("genre", "runtime", "year") if f.get(k))
+
+
 def card(f):
-    poster = img(f["slug"], "poster") or img(f["slug"], "still")
+    poster = exists(f"assets/posters/{f['slug']}.jpg") or exists(f"assets/{f['slug']}-still.jpg")
     art = (
         f'<img src="{poster}" alt="{esc(f["title"])} poster" loading="lazy">'
         if poster
         else f'<div class="ph"><span>{esc(f["title"])}</span></div>'
     )
+    status = f'<span class="status">{esc(f["status"])}</span>\n  ' if f.get("status") else ""
     return f"""<a class="card" href="films/{f['slug']}.html">
   <div class="art">{art}</div>
-  <div class="meta"><span class="status">{esc(f['status'])}</span>
-  <h3>{esc(f['title'])}</h3>
-  <p>{esc(f['genre'])} &middot; {esc(f['runtime'])} &middot; {f['year']}</p></div>
+  <div class="meta">{status}<h3>{esc(f['title'])}</h3>
+  <p>{facts(f)}</p></div>
 </a>"""
 
 
-# Home
-hero = films[0]
-still = img(hero["slug"], "still")
-bg = f" style=\"background-image:url('{still}')\"" if still else ""
+# Home: the brand reel opens the page, the films follow
 write("index.html", page(
-    "Bairview Films", site["tagline"], f"""<section class="hero"{bg}>
-  <div class="hero-inner">
-    <span class="status">Latest</span>
-    <h1>{esc(hero['title'])}</h1>
-    <p>{esc(hero['logline'])}</p>
-    <a class="btn" href="films/{hero['slug']}.html">View Film</a>
-  </div>
+    "Bairview Films", site["tagline"], f"""<section class="reel">
+  <video autoplay muted loop playsinline preload="auto" poster="assets/reel-poster.jpg" aria-label="Bairview Films logo animation">
+    <source src="assets/reel.mp4" type="video/mp4">
+  </video>
+</section>
+<section class="intro">
+  <p>{esc(site['tagline'])}</p>
+  <a class="btn" href="#films">View Films</a>
 </section>
 <section id="films" class="wrap">
-  <h2>All Films</h2>
+  <h2>Films</h2>
   <div class="grid">
 {chr(10).join(card(f) for f in films)}
   </div>
-</section>""", active="films"))
+</section>
+<script>
+if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {{
+  var v = document.querySelector(".reel video");
+  v.removeAttribute("autoplay");
+  v.pause();
+}}
+</script>""", active="films"))
 
 # Film pages
 for f in films:
-    still = img(f["slug"], "still")
+    slug = f["slug"]
+    still = exists(f"assets/{slug}-still.jpg")
     bg = f" style=\"background-image:url('../{still}')\"" if still else ""
-    cast = ", ".join(esc(x) for x in f["cast"])
-    def embed(label, vid):
-        return (f'<h2>{label}</h2>\n  <div class="video"><iframe src="https://www.youtube-nocookie.com/embed/{vid}" '
+    poster = exists(f"assets/posters/{slug}.jpg")
+    parts = []
+
+    top = []
+    if poster:
+        top.append(f'<img class="poster" src="../{poster}" alt="{esc(f["title"])} poster">')
+    info = []
+    if f.get("logline"):
+        info.append(f'<p class="logline">{esc(f["logline"])}</p>')
+    if f.get("links"):
+        info.append(f'<p class="ext">{link_list(f["links"])}</p>')
+    if top or info:
+        parts.append(f'<div class="film-top">{"".join(top)}<div>{"".join(info)}</div></div>')
+
+    for label, key in (("Trailer", "trailer_video"), ("Watch the Film", "film_video")):
+        if f.get(key):
+            parts.append(
+                f'<h2>{label}</h2>\n  <div class="video"><iframe src="https://www.youtube-nocookie.com/embed/{f[key]}" '
                 f'title="{esc(f["title"])} {label}" loading="lazy" allowfullscreen></iframe></div>')
-    videos = embed("Trailer", f["trailer_video"]) + "\n  " + embed("Watch the Film", f["film_video"])
-    laurels = "\n".join(f"    <li>{esc(x)}</li>" for x in f["laurels"])
-    write(f"films/{f['slug']}.html", page(
-        f"{f['title']} | Bairview Films", f["logline"], f"""<section class="hero short"{bg}>
+
+    if f.get("cast"):
+        parts.append(f'<h2>Starring</h2>\n  <p>{", ".join(esc(x) for x in f["cast"])}</p>')
+
+    laurel_files = sorted(glob.glob(f"assets/laurels/{slug}--*.png"))
+    if laurel_files:
+        imgs = "\n".join(
+            f'    <img src="../{p}" alt="{esc(os.path.basename(p)[len(slug) + 2:-4].replace("-", " ").title())}" loading="lazy">'
+            for p in laurel_files)
+        parts.append(f'<h2>Official Selections</h2>\n  <div class="laurels">\n{imgs}\n  </div>')
+    elif f.get("laurels"):
+        items = "\n".join(f"    <li>{esc(x)}</li>" for x in f["laurels"])
+        parts.append(f'<h2>Official Selections</h2>\n  <ul class="laurel-list">\n{items}\n  </ul>')
+
+    shots = sorted(glob.glob(f"assets/stills/{slug}-*.jpg"))
+    gallery = ""
+    if shots:
+        tiles = "\n".join(
+            f'    <a href="../{p}"><img src="../{p}" alt="{esc(f["title"])} still {i}" loading="lazy"></a>'
+            for i, p in enumerate(shots, 1))
+        gallery = f'<section class="wrap"><h2>Stills</h2>\n  <div class="gallery">\n{tiles}\n  </div></section>'
+
+    write(f"films/{slug}.html", page(
+        f"{f['title']} | Bairview Films", f.get("logline") or f"{f['title']}, a Bairview Films production.",
+        f"""<section class="hero short"{bg}>
   <div class="hero-inner">
-    <span class="status">{esc(f['status'])}</span>
+    {f'<span class="status">{esc(f["status"])}</span>' if f.get("status") else ""}
     <h1>{esc(f['title'])}</h1>
-    <p class="facts">{esc(f['genre'])} &middot; {esc(f['runtime'])} &middot; {f['year']}</p>
+    <p class="facts">{facts(f)}</p>
   </div>
 </section>
 <section class="wrap narrow">
-  <p class="logline">{esc(f['logline'])}</p>
-  {videos}
-  <h2>Starring</h2>
-  <p>{cast}</p>
-  <h2>Official Selections</h2>
-  <ul class="laurels">
-{laurels}
-  </ul>
+  {chr(10).join(parts)}
   <p><a class="btn ghost" href="../index.html#films">All Films</a></p>
-</section>""", depth=1, active="films"))
+</section>
+{gallery}""", depth=1, active="films"))
 
 # About
-paras = "\n".join(f"  <p>{esc(p)}</p>" for p in c["about"])
-write("about.html", page("About | Bairview Films", c["about"][0], f"""<section class="wrap narrow">
-  <h1>About</h1>
+paras = "\n".join(f"    <p>{esc(p)}</p>" for p in c["about"])
+portrait = exists("assets/kaleb.jpg")
+photo = f'<img class="portrait" src="{portrait}" alt="{esc(site["owner"])}">' if portrait else ""
+write("about.html", page("About | Bairview Films", c["about"][0], f"""<section class="wrap about">
+  {photo}
+  <div>
+    <h1>About</h1>
 {paras}
-  <p class="facts">{esc(site['owner'])}<br>{esc(site['roles'])}</p>
+    <p class="facts">{esc(site['owner'])}<br>{esc(site['roles'])}</p>
+    <p class="ext">{link_list(site['owner_links'])}</p>
+  </div>
 </section>""", active="about"))
 
 # Contact

@@ -7,11 +7,13 @@
 <meta name="description" content="Stories from the Midwest, made in the dark.">
 <meta property="og:title" content="Bairview Films">
 <meta property="og:description" content="Stories from the Midwest, made in the dark.">
+<meta property="og:image" content="https://bairviewfilms.com/assets/reel-poster.jpg">
+<link rel="icon" type="image/png" href="assets/favicon.png">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
 <header class="top">
-  <a class="brand" href="index.html">Bairview Films</a>
+  <a class="brand" href="index.html"><img src="assets/logo.png" alt="Bairview Films"></a>
   <nav>
     <a href="index.html#films" aria-current="page">Films</a>
     <a href="about.html">About</a>
@@ -19,25 +21,31 @@
   </nav>
 </header>
 <main>
-<section class="hero" style="background-image:url('assets/the-lost-place-still.jpg')">
-  <div class="hero-inner">
-    <span class="status">Latest</span>
-    <h1>The Lost Place</h1>
-    <p>Two brothers in a ruined world capture a mysterious woman called a &quot;Lost One.&quot;</p>
-    <a class="btn" href="films/the-lost-place.html">View Film</a>
-  </div>
+<section class="reel">
+  <video autoplay muted loop playsinline preload="auto" poster="assets/reel-poster.jpg" aria-label="Bairview Films logo animation">
+    <source src="assets/reel.mp4" type="video/mp4">
+  </video>
+</section>
+<section class="intro">
+  <p>Stories from the Midwest, made in the dark.</p>
+  <a class="btn" href="#films">View Films</a>
 </section>
 <section id="films" class="wrap">
-  <h2>All Films</h2>
+  <h2>Films</h2>
   <div class="grid">
+<a class="card" href="films/solus.html">
+  <div class="art"><img src="assets/posters/solus.jpg" alt="Solus poster" loading="lazy"></div>
+  <div class="meta"><h3>Solus</h3>
+  <p>2026</p></div>
+</a>
 <a class="card" href="films/the-lost-place.html">
-  <div class="art"><img src="assets/the-lost-place-still.jpg" alt="The Lost Place poster" loading="lazy"></div>
+  <div class="art"><img src="assets/posters/the-lost-place.jpg" alt="The Lost Place poster" loading="lazy"></div>
   <div class="meta"><span class="status">Festival Circuit</span>
   <h3>The Lost Place</h3>
   <p>Drama &middot; 35 min &middot; 2025</p></div>
 </a>
 <a class="card" href="films/roadkill.html">
-  <div class="art"><img src="assets/roadkill-still.jpg" alt="ROADKILL poster" loading="lazy"></div>
+  <div class="art"><img src="assets/posters/roadkill.jpg" alt="ROADKILL poster" loading="lazy"></div>
   <div class="meta"><span class="status">Festival Circuit</span>
   <h3>ROADKILL</h3>
   <p>Horror &middot; 30 min &middot; 2024</p></div>
@@ -50,10 +58,17 @@
 </a>
   </div>
 </section>
+<script>
+if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+  var v = document.querySelector(".reel video");
+  v.removeAttribute("autoplay");
+  v.pause();
+}
+</script>
 </main>
 <footer>
-  <div class="foot-brand">Bairview Films</div>
-  <div class="foot-links"><a href="https://www.youtube.com/@BairViewFilms" rel="noopener">YouTube</a><a href="mailto:kalebfobair@gmail.com">Email</a></div>
+  <img class="foot-bear" src="assets/bear.png" alt="">
+  <div class="foot-links"><a href="https://www.youtube.com/@BairViewFilms" rel="noopener">YouTube</a><a href="https://www.instagram.com/bairviewfilms/" rel="noopener">Instagram</a><a href="mailto:kalebfobair@gmail.com">Email</a></div>
   <div class="foot-small">&copy; 2026 Bairview Films.</div>
 </footer>
 </body>

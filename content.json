@@ -1,6 +1,7 @@
 {
   "site": {
     "name": "Bairview Films",
+    "url": "https://bairviewfilms.com",
     "tagline": "Stories from the Midwest, made in the dark.",
     "email": "kalebfobair@gmail.com",
     "owner": "Kaleb Fobair",
@@ -9,6 +10,20 @@
       {
         "label": "YouTube",
         "url": "https://www.youtube.com/@BairViewFilms"
+      },
+      {
+        "label": "Instagram",
+        "url": "https://www.instagram.com/bairviewfilms/"
+      }
+    ],
+    "owner_links": [
+      {
+        "label": "IMDb",
+        "url": "https://www.imdb.com/name/nm16239884/"
+      },
+      {
+        "label": "Instagram",
+        "url": "https://www.instagram.com/kalebfobair/"
       }
     ]
   },
@@ -17,6 +32,21 @@
     "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
   ],
   "films": [
+    {
+      "slug": "solus",
+      "title": "Solus",
+      "year": 2026,
+      "links": [
+        {
+          "label": "IMDb",
+          "url": "https://www.imdb.com/title/tt39569519/"
+        },
+        {
+          "label": "Letterboxd",
+          "url": "https://letterboxd.com/film/solus-2026/"
+        }
+      ]
+    },
     {
       "slug": "the-lost-place",
       "title": "The Lost Place",
@@ -37,7 +67,17 @@
         "Fault Line 2026"
       ],
       "film_video": "t8J93DdeEGc",
-      "trailer_video": "bgR_CeKLuIU"
+      "trailer_video": "bgR_CeKLuIU",
+      "links": [
+        {
+          "label": "IMDb",
+          "url": "https://www.imdb.com/title/tt35663446/"
+        },
+        {
+          "label": "Letterboxd",
+          "url": "https://letterboxd.com/film/the-lost-place/"
+        }
+      ]
     },
     {
       "slug": "roadkill",
@@ -61,7 +101,17 @@
         "The Andys 2026"
       ],
       "film_video": "QhcGdsKC2G8",
-      "trailer_video": "oI23hTnFfkw"
+      "trailer_video": "oI23hTnFfkw",
+      "links": [
+        {
+          "label": "IMDb",
+          "url": "https://www.imdb.com/title/tt34560414/"
+        },
+        {
+          "label": "Letterboxd",
+          "url": "https://letterboxd.com/film/roadkill-2024-3/"
+        }
+      ]
     },
     {
       "slug": "room-10",
@@ -83,7 +133,17 @@
         "BisonBison 2026"
       ],
       "film_video": "WqRbVnFbb8s",
-      "trailer_video": "mk46OSJkbHg"
+      "trailer_video": "mk46OSJkbHg",
+      "links": [
+        {
+          "label": "IMDb",
+          "url": "https://www.imdb.com/title/tt32562359/"
+        },
+        {
+          "label": "Letterboxd",
+          "url": "https://letterboxd.com/film/room-10-2024/"
+        }
+      ]
     }
   ]
 }
