@@ -117,16 +117,10 @@ for f in films:
     poster = exists(f"assets/posters/{slug}.jpg")
     parts = []
 
-    top = []
-    if poster:
-        top.append(f'<img class="poster" src="../{poster}" alt="{esc(f["title"])} poster">')
-    info = []
     if f.get("logline"):
-        info.append(f'<p class="logline">{esc(f["logline"])}</p>')
+        parts.append(f'<p class="logline">{esc(f["logline"])}</p>')
     if f.get("links"):
-        info.append(f'<p class="ext">{link_list(f["links"])}</p>')
-    if top or info:
-        parts.append(f'<div class="film-top">{"".join(top)}<div>{"".join(info)}</div></div>')
+        parts.append(f'<p class="ext">{link_list(f["links"])}</p>')
 
     for label, key in (("Trailer", "trailer_video"), ("Watch the Film", "film_video")):
         if f.get(key):
@@ -148,25 +142,30 @@ for f in films:
         parts.append(f'<h2>Official Selections</h2>\n  <ul class="laurel-list">\n{items}\n  </ul>')
 
     shots = sorted(glob.glob(f"assets/stills/{slug}-*.jpg"))
-    gallery = ""
-    if shots:
-        slides = "\n".join(
-            f'      <img{" class=\"on\"" if i == 1 else ""} src="../{p}" alt="{esc(f["title"])} still {i}" loading="{"eager" if i == 1 else "lazy"}">'
-            for i, p in enumerate(shots, 1))
-        dots = "<i class=\"on\"></i>" + "<i></i>" * (len(shots) - 1)
-        arrows = (
-            '<button type="button" class="car-nav car-prev" aria-label="Previous still">&lsaquo;</button>'
-            '<button type="button" class="car-nav car-next" aria-label="Next still">&rsaquo;</button>'
-            f'<span class="car-dots">{dots}</span>') if len(shots) > 1 else ""
-        gallery = f"""<section class="wrap car-sec"><h2>Stills</h2>
-  <div class="car" role="region" aria-roledescription="carousel" aria-label="{esc(f['title'])} stills">
-    <div class="car-frame" tabindex="0">
-      <div class="car-bg" style="background-image:url('../{shots[0]}')"></div>
-{slides}
-      {arrows}
-    </div>
+    row = ""
+    if poster or shots:
+        art = f'<img class="poster" src="../{poster}" alt="{esc(f["title"])} poster">' if poster else ""
+        reel = ""
+        if shots:
+            def tiles(dup):
+                extra = ' aria-hidden="true" tabindex="-1"' if dup else ""
+                return "\n".join(
+                    f'        <button type="button" class="rail-t" data-i="{i}"{extra if dup else f" aria-label=\"Open still {i}\""}>'
+                    f'<img src="../{p}" alt="" loading="lazy"></button>'
+                    for i, p in enumerate(shots))
+            reel = f"""<div class="rail" style="--dur:{len(shots) * 6}s" role="region" aria-label="{esc(f['title'])} stills">
+      <div class="rail-track">
+{tiles(False)}
+{tiles(True)}
+      </div>
+    </div>"""
+        row = f"""<section class="wrap strip">
+  <div class="strip-row">
+    {art}
+    {reel}
   </div>
-  <script src="../carousel.js" defer></script></section>"""
+  <script src="../carousel.js" defer></script>
+</section>"""
 
     write(f"films/{slug}.html", page(
         f"{f['title']} | Bairview Films", f.get("logline") or f"{f['title']}, a Bairview Films production.",
@@ -177,11 +176,11 @@ for f in films:
     <p class="facts">{facts(f)}</p>
   </div>
 </section>
+{row}
 <section class="wrap narrow">
   {chr(10).join(parts)}
   <p><a class="btn ghost" href="../index.html">All Films</a></p>
-</section>
-{gallery}""", depth=1, active="films"))
+</section>""", depth=1, active="films"))
 
 # About
 paras = "\n".join(f"    <p>{esc(p)}</p>" for p in c["about"])
