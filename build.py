@@ -5,6 +5,7 @@ Images come from assets/ (see prep_assets.py):
 import glob
 import json
 import os
+import re
 from html import escape as esc
 from datetime import date
 
@@ -16,6 +17,11 @@ os.makedirs("films", exist_ok=True)
 
 def exists(path):
     return path if os.path.exists(path) else None
+
+
+def rich(text):
+    """Escape text, then turn [label](https://...) into a link."""
+    return re.sub(r"\[([^\]]+)\]\((https?://[^)\s]+)\)", r'<a href="\2" rel="noopener">\1</a>', esc(text))
 
 
 def write(path, text):
@@ -188,7 +194,7 @@ for f in films:
 <div class="wrap back"><a class="btn ghost" href="../index.html">Back to Films</a></div>""", depth=1, active="films"))
 
 # About
-paras = "\n".join(f"    <p>{esc(p)}</p>" for p in c["about"])
+paras = "\n".join(f"    <p>{rich(p)}</p>" for p in c["about"])
 portrait = exists("assets/kaleb.jpg")
 photo = f'<img class="portrait" src="{portrait}" alt="{esc(site["owner"])}">' if portrait else ""
 write("about.html", page("About | Bairview Films", c["about"][0], f"""<section class="wrap about">
