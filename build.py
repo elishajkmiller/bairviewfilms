@@ -51,7 +51,7 @@ def page(title, desc, body, depth=0, active=""):
 <header class="top">
   <a class="brand" href="{r}index.html"><img src="{r}assets/logo.png" alt="Bairview Films"></a>
   <nav>
-    {link('index.html#films', 'Films', 'films')}
+    {link('index.html', 'Films', 'films')}
     {link('about.html', 'About', 'about')}
     {link('contact.html', 'Contact', 'contact')}
   </nav>
@@ -166,7 +166,7 @@ for f in films:
 </section>
 <section class="wrap narrow">
   {chr(10).join(parts)}
-  <p><a class="btn ghost" href="../index.html#films">All Films</a></p>
+  <p><a class="btn ghost" href="../index.html">All Films</a></p>
 </section>
 {gallery}""", depth=1, active="films"))
 
