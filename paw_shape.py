@@ -11,18 +11,19 @@ SLIT_ANGLE = 17    # degrees from vertical: the cuts lean like "/" on a left foo
 SLIT_AT = (-36, 36)  # offsets of the two cuts from the pad centre, across the cut direction
 SLIT_GAP = 9
 
-# each kind: pad outline, optional heel, toes (center x, center y, angle from straight up, width, height), claw length and width
+# each kind: pad outline, optional heel, toes (center x, center y, angle from straight up, width, height), claw length and width,
+# shift = how far the two cuts are moved across the pad (to the right on a left foot)
 KINDS = {
     "front": dict(
         pad=[(200, 176), (302, 214), (336, 304), (270, 378), (200, 424), (130, 378), (64, 304), (98, 214)],
         heel=None,
         toes=[(40, 216, -36, 50, 90), (115, 124, -16, 58, 104), (200, 94, 0, 62, 110), (285, 124, 16, 58, 104), (360, 216, 36, 50, 90)],
-        claw=(54, 7.5)),
+        claw=(54, 7.5), shift=0),
     "hind": dict(
         pad=[(200, 196), (284, 226), (314, 290), (266, 352), (200, 382), (134, 352), (86, 290), (116, 226)],
         heel=[(126, 392), (274, 392), (292, 430), (266, 486), (200, 508), (134, 486), (108, 430)],
         toes=[(62, 222, -30, 42, 78), (122, 146, -12, 50, 92), (200, 116, 0, 54, 98), (278, 146, 12, 50, 92), (338, 222, 30, 42, 78)],
-        claw=(32, 6)),
+        claw=(32, 6), shift=18),
 }
 
 
@@ -51,14 +52,14 @@ def _area(poly):
     return abs(sum(p[0] * q[1] - q[0] * p[1] for p, q in zip(poly, poly[1:] + poly[:1]))) / 2
 
 
-def pad_pieces(pad, cy=None):
+def pad_pieces(pad, cy=None, shift=0):
     """The pad cut into up to three pieces by two parallel slashes. cy is the height the cuts are centred on, so a
     second piece (the hind heel) can be cut by the same two lines."""
     a = math.radians(SLIT_ANGLE)
     nx, ny = math.cos(a), math.sin(a)             # across the cuts
     if cy is None:
         cy = (min(p[1] for p in pad) + max(p[1] for p in pad)) / 2
-    mid = nx * 200 + ny * cy
+    mid = nx * 200 + ny * cy + shift
     edges = [-1e9] + [mid + o for o in SLIT_AT] + [1e9]
     pieces = []
     for i in range(3):
@@ -99,9 +100,9 @@ def claw(cx, cy, ang, w, h, length, width):
 def _raw(kind, with_claws=True):
     k = KINDS[kind]
     cy = (min(p[1] for p in k["pad"]) + max(p[1] for p in k["pad"])) / 2
-    out = [(f"Pad {i + 1}", p) for i, p in enumerate(pad_pieces(k["pad"], cy))]
+    out = [(f"Pad {i + 1}", p) for i, p in enumerate(pad_pieces(k["pad"], cy, k["shift"]))]
     if k["heel"]:  # cut by the same two lines as the pad, so the slashes run on through the heel
-        out += [(f"Heel {i + 1}", p) for i, p in enumerate(pad_pieces(k["heel"], cy))]
+        out += [(f"Heel {i + 1}", p) for i, p in enumerate(pad_pieces(k["heel"], cy, k["shift"]))]
     out += [(f"Toe {i + 1}", toe(*t)) for i, t in enumerate(k["toes"])]
     if with_claws:
         out += [(f"Claw {i + 1}", claw(*t, *k["claw"])) for i, t in enumerate(k["toes"])]
