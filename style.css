@@ -125,3 +125,17 @@ footer { background:rgba(10,10,10,.55); border-top:1px solid var(--line); paddin
 .cform .btn:disabled { opacity:.5; cursor:default; }
 .status-line { margin-top:14px; color:var(--dim); min-height:1.6em; }
 @media (max-width:600px) { .cform .row2 { grid-template-columns:1fr; } }
+
+.top { gap:12px; }
+@media (max-width:600px) {
+  .top { padding:14px 4vw; }
+  .brand img { height:28px; }
+  nav { gap:14px; }
+  nav a { font-size:.7rem; letter-spacing:.1em; }
+}
+@media (max-width:400px) {
+  .top { padding:12px 3vw; }
+  .brand img { height:24px; }
+  nav { gap:10px; }
+  nav a { font-size:.64rem; letter-spacing:.06em; }
+}
