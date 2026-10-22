@@ -122,7 +122,8 @@ if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {{
 for f in films:
     slug = f["slug"]
     still = exists(f"assets/{slug}-still.jpg")
-    bg = f" style=\"background-image:url('../{still}')\"" if still else ""
+    pos = f";background-position:{f['hero_position']}" if f.get("hero_position") else ""
+    bg = f" style=\"background-image:url('../{still}'){pos}\"" if still else ""
     poster = exists(f"assets/posters/{slug}.jpg")
     parts = []
 

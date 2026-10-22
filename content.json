@@ -56,6 +56,7 @@
     {
       "slug": "the-lost-place",
       "title": "The Lost Place",
+      "hero_position": "center 6%",
       "genre": "Drama",
       "runtime": "35 min",
       "year": 2025,
