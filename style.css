@@ -223,8 +223,3 @@ main { position:relative; }
 .cart .gloss { position:absolute; inset:0; z-index:3; pointer-events:none; border-radius:inherit;
   background:linear-gradient(112deg, rgba(255,255,255,.2) 0, rgba(255,255,255,.05) 14%, rgba(255,255,255,0) 28%, rgba(255,255,255,0) 72%, rgba(255,255,255,.09) 88%, rgba(255,255,255,.02) 100%); }
 @media (max-width:700px) { .cart { background-position:calc(100% - 20px) 9px, calc(100% - 20px) calc(100% - 9px), 0 0, 0 0; } }
-/* a red line on each side of both rows of holes: the outer edge of the film (inset shadow above) and the inner edge */
-.rail.film .rail-track::before, .rail.film .rail-track::after { box-sizing:border-box; }
-.rail.film .rail-track::before { border-bottom:3px solid var(--brand); }
-.rail.film .rail-track::after { border-top:3px solid var(--brand); background-position:0 -3px; }
-@media (max-width:700px) { .rail.film .rail-track::after { background-position:0 -5px; } }
