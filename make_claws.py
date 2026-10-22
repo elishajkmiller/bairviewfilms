@@ -8,7 +8,7 @@ rnd = random.Random(417)
 
 # (x %, y %) of the viewport for each group; the group's own drawing starts at ox, oy in local units
 GROUPS = [(6, 6), (87, 12), (62, 44), (10, 66), (80, 70), (42, 90)]
-DELAYS = [0.3, 1.4, 2.8, 4.2, 5.6, 7.0]
+DELAYS = [0.2 + 0.25 * sorted(g[0] for g in GROUPS).index(g[0]) for g in GROUPS]  # sweep left to right
 
 
 def slash(x, y, ang, length, wmax, bend):
@@ -48,11 +48,12 @@ for (px, py), delay in zip(GROUPS, DELAYS):
     ys = [p[1] for s in shapes for p in s]
     x0, y0 = min(xs) - 2, min(ys) - 2
     w, h = max(xs) + 2 - x0, max(ys) + 2 - y0
+    shapes.sort(key=lambda s: sum(p[0] for p in s) / len(s))
     paths = "".join(
-        f'<path style="animation-delay:{delay + k * 0.18:.2f}s" d="M' +
+        f'<path style="animation-delay:{delay + k * 0.12:.2f}s" d="M' +
         " L".join(f"{a:.1f},{b:.1f}" for a, b in s) + 'Z"/>' for k, s in enumerate(shapes))
     svgs.append(
-        f'<svg class="claw" style="left:{px}%;top:{py}%;animation-delay:{delay}s" width="{w:.0f}" height="{h:.0f}" '
+        f'<svg class="claw" style="left:{px}%;top:{py}%;animation-delay:{delay:.2f}s" width="{w:.0f}" height="{h:.0f}" '
         f'viewBox="{x0:.1f} {y0:.1f} {w:.1f} {h:.1f}">{paths}</svg>')
 
 open("assets/claws.html", "w").write("\n".join(svgs) + "\n")
