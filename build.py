@@ -235,9 +235,14 @@ for s in c.get("bts", {}).get("sections", []):
         inner.append('<div class="bts-grid">\n' + "\n".join(tiles) + "\n  </div>")
     blocks.append(
         f'<h2 id="{slug}"><a href="films/{slug}.html">{esc(titles[slug])}</a></h2>\n  ' + "\n  ".join(inner))
+playlist = ""
+if c["bts"].get("playlist"):
+    playlist = (f'<div class="video"><iframe src="https://www.youtube-nocookie.com/embed/videoseries?list={esc(c["bts"]["playlist"])}" '
+                f'title="Behind the scenes playlist" loading="lazy" allowfullscreen></iframe></div>')
 write("bts.html", page("Behind the Scenes | Bairview Films", c["bts"]["intro"], f"""<section class="wrap bts">
   <h1>Behind the Scenes</h1>
   <p class="lead">{esc(c["bts"]["intro"])}</p>
+  {playlist}
   {chr(10).join(blocks)}
   <script src="bts.js" defer></script>
 </section>""", active="bts"))
