@@ -208,47 +208,58 @@ write("about.html", page("About | Bairview Films", c["about"][0], f"""<section c
   </div>
 </section>""", active="about"))
 
-# Behind the scenes: photo walls per film, plus optional interview videos and links from content.json
+# Behind the scenes: one row per film like the film pages, with its BTS video(s) on the left and a scrolling
+# strip of set photos on the right (bts.js: click-to-play video, tabs for more videos, photo lightbox).
 sizes = json.load(open("assets/bts/sizes.json")) if os.path.exists("assets/bts/sizes.json") else {}
 titles = {f["slug"]: f["title"] for f in films}
 blocks = []
 for s in c.get("bts", {}).get("sections", []):
     slug = s["slug"]
     shots = sorted(glob.glob(f"assets/bts/{slug}-*.jpg"))
-    if not (shots or s.get("videos") or s.get("links")):
+    vids = s.get("videos", [])
+    if not (shots or vids or s.get("links")):
         continue
-    inner = []
-    for v in s.get("videos", []):
-        inner.append(
-            f'<div class="video"><iframe src="https://www.youtube-nocookie.com/embed/{esc(v["id"])}" '
-            f'title="{esc(v.get("title", titles[slug] + " behind the scenes"))}" loading="lazy" allowfullscreen></iframe></div>')
-    if s.get("links"):
-        inner.append(f'<p class="ext">{link_list(s["links"])}</p>')
+    row = []
+    if vids:
+        v = vids[0]
+        tabs = ""
+        if len(vids) > 1:
+            tabs = '<div class="vtabs">' + "".join(
+                f'<button type="button" data-id="{esc(x["id"])}" data-title="{esc(x["title"])}"'
+                f'{" class=\"on\"" if i == 0 else ""}>{esc(x.get("label", str(i + 1)))}</button>'
+                for i, x in enumerate(vids)) + "</div>"
+        row.append(
+            f'<div class="vid-col"><button type="button" class="vthumb" data-id="{esc(v["id"])}" data-title="{esc(v["title"])}" '
+            f'aria-label="Play {esc(v["title"])}"><img src="https://i.ytimg.com/vi/{esc(v["id"])}/hqdefault.jpg" alt="" loading="lazy"><i></i></button>'
+            f'{tabs}<p class="vcap">{esc(v["title"])}</p></div>')
     if shots:
-        tiles = []
-        for i, p in enumerate(shots):
-            key = os.path.basename(p)[:-4]
-            w, h = sizes.get(key, (640, 427))
-            tiles.append(
-                f'    <button type="button" class="bts-t" data-full="{p}" aria-label="Open photo {i + 1}">'
-                f'<img src="assets/bts/thumb/{key}.jpg" width="{w}" height="{h}" alt="" loading="lazy"></button>')
-        inner.append('<div class="bts-grid">\n' + "\n".join(tiles) + "\n  </div>")
+        def tiles(dup):
+            out = []
+            for i, p in enumerate(shots):
+                key = os.path.basename(p)[:-4]
+                label = ' aria-hidden="true" tabindex="-1"' if dup else f' aria-label="Open photo {i + 1}"'
+                out.append(
+                    f'        <button type="button" class="rail-t" data-i="{i}" data-full="{p}"{label}>'
+                    f'<img src="assets/bts/thumb/{key}.jpg" alt="" loading="lazy"></button>')
+            return "\n".join(out)
+        row.append(f'''<div class="rail" style="--dur:{len(shots) * 6}s;--avg:{colors.get(slug, "#2a2a2a")}" role="region" aria-label="{esc(titles[slug])} behind the scenes photos">
+      <div class="rail-track">
+{tiles(False)}
+{tiles(True)}
+      </div>
+    </div>''')
+    ext = f'<p class="ext">{link_list(s["links"])}</p>' if s.get("links") else ""
     blocks.append(
-        f'<h2 id="{slug}"><a href="films/{slug}.html">{esc(titles[slug])}</a></h2>\n  ' + "\n  ".join(inner))
-playlist = ""
-if c["bts"].get("videos"):
-    cards = "\n".join(
-        f'    <button type="button" class="vcard" data-id="{esc(v["id"])}" data-title="{esc(v["title"])}">'
-        f'<span class="vthumb"><img src="https://i.ytimg.com/vi/{esc(v["id"])}/hqdefault.jpg" alt="" loading="lazy"><i></i></span>'
-        f'<span class="vt">{esc(v["title"])}</span></button>'
-        for v in c["bts"]["videos"])
+        f'<h2 id="{slug}"><a href="films/{slug}.html">{esc(titles[slug])}</a></h2>\n  <div class="strip-row">\n    ' +
+        "\n    ".join(row) + f"\n  </div>\n  {ext}")
+more = ""
+if c["bts"].get("playlist"):
     more = (f'<p class="ext"><a href="https://www.youtube.com/playlist?list={esc(c["bts"]["playlist"])}" rel="noopener">'
-            "Full playlist on YouTube</a></p>") if c["bts"].get("playlist") else ""
-    playlist = f'<h2>Videos</h2>\n  <div class="vgrid">\n{cards}\n  </div>\n  {more}'
+            "Full playlist on YouTube</a></p>")
 write("bts.html", page("Behind the Scenes | Bairview Films", c["bts"]["intro"], f"""<section class="wrap bts">
   <h1>Behind the Scenes</h1>
   <p class="lead">{esc(c["bts"]["intro"])}</p>
-  {playlist}
+  {more}
   {chr(10).join(blocks)}
   <script src="bts.js" defer></script>
 </section>""", active="bts"))

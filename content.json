@@ -155,36 +155,31 @@
   "bts": {
     "intro": "Set photos, interviews and making-of from past productions.",
     "playlist": "PLVfej4Xos0ygXRBKdsCI5Nqx2LCJzuwp3",
-    "videos": [
-      {
-        "id": "Bpvo85tOHKw",
-        "title": "The Lost Tapes - VOL. 1"
-      },
-      {
-        "id": "npA6Rkt0UJ8",
-        "title": "The Lost Tapes - VOL. 2"
-      },
-      {
-        "id": "OFYmwmXyiGo",
-        "title": "The Lost Tapes - VOL. 3"
-      },
-      {
-        "id": "RcT8UYIZ0nA",
-        "title": "The Lost Tapes - VOL. 4"
-      },
-      {
-        "id": "XWVwWBF2ZNk",
-        "title": "BEHIND THE DOOR PT.1 - ROOM 10 Behind the Scenes"
-      },
-      {
-        "id": "2oTmlujmajY",
-        "title": "BEHIND THE DOOR PT.2 - ROOM 10 Behind the Scenes"
-      }
-    ],
     "sections": [
       {
         "slug": "the-lost-place",
-        "videos": [],
+        "videos": [
+          {
+            "id": "Bpvo85tOHKw",
+            "label": "Vol. 1",
+            "title": "The Lost Tapes - VOL. 1"
+          },
+          {
+            "id": "npA6Rkt0UJ8",
+            "label": "Vol. 2",
+            "title": "The Lost Tapes - VOL. 2"
+          },
+          {
+            "id": "OFYmwmXyiGo",
+            "label": "Vol. 3",
+            "title": "The Lost Tapes - VOL. 3"
+          },
+          {
+            "id": "RcT8UYIZ0nA",
+            "label": "Vol. 4",
+            "title": "The Lost Tapes - VOL. 4"
+          }
+        ],
         "links": []
       },
       {
@@ -194,7 +189,18 @@
       },
       {
         "slug": "room-10",
-        "videos": [],
+        "videos": [
+          {
+            "id": "XWVwWBF2ZNk",
+            "label": "Pt. 1",
+            "title": "BEHIND THE DOOR PT.1 - ROOM 10 Behind the Scenes"
+          },
+          {
+            "id": "2oTmlujmajY",
+            "label": "Pt. 2",
+            "title": "BEHIND THE DOOR PT.2 - ROOM 10 Behind the Scenes"
+          }
+        ],
         "links": []
       }
     ]
