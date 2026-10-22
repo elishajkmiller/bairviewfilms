@@ -1,5 +1,5 @@
 """Write assets/claws.svg: a tile of claw-mark scratches (groups of 3 or 4 tapered slashes) in the BairView red.
-Each group scratches in slash by slash, holds with a pulsing glow, fades and repeats (CSS animation inside the SVG,
+Each group scratches in slash by slash, holds, fades and repeats (CSS animation inside the SVG,
 off when the visitor prefers reduced motion). Run: python3 make_claws.py   (fixed seed, the pattern is stable)"""
 import math
 import random
@@ -34,7 +34,7 @@ def slash(x, y, ang, length, wmax, bend):
     return poly, line
 
 
-masks, glow, crisp = [], [], []
+masks, crisp = [], []
 uid = 0
 for gi, (ox, oy) in enumerate(ORIGINS):
     base = math.radians(rnd.uniform(50, 78))        # slanted down to the right
@@ -60,26 +60,22 @@ for gi, (ox, oy) in enumerate(ORIGINS):
         uid += 1
     body = "".join(polys)
     delay = f"animation-delay:{DELAYS[gi]:.2f}s"
-    glow.append(f'<g class="g" style="{delay}"><g class="glow" style="{delay}" filter="url(#blur)">{body}</g></g>')
     crisp.append(f'<g class="g" style="{delay}">{body}</g>')
 
 css = f"""
 .m {{ fill:none; stroke:#fff; stroke-width:30; stroke-dasharray:1; stroke-dashoffset:1; animation:draw {CYCLE}s infinite; }}
 .g {{ animation:fade {CYCLE}s infinite; }}
-.glow {{ animation:pulse 3s ease-in-out infinite alternate; }}
 @keyframes draw {{ 0% {{ stroke-dashoffset:1; animation-timing-function:cubic-bezier(.2,.7,.3,1); }} 6% {{ stroke-dashoffset:0; }} 96% {{ stroke-dashoffset:0; }} 97%,100% {{ stroke-dashoffset:1; }} }}
 @keyframes fade {{ 0%,76% {{ opacity:1; }} 94%,100% {{ opacity:0; }} }}
-@keyframes pulse {{ from {{ opacity:.35; }} to {{ opacity:1; }} }}
 @media (prefers-reduced-motion:reduce) {{
   .m {{ animation:none; stroke-dashoffset:0; }}
   .g {{ animation:none; opacity:1; }}
-  .glow {{ animation:none; opacity:.6; }}
 }}
 """
 svg = (f'<svg xmlns="http://www.w3.org/2000/svg" width="{W}" height="{H}" viewBox="0 0 {W} {H}">\n'
        f'<style>{css}</style>\n'
-       f'<defs><filter id="blur" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="7"/><feComponentTransfer><feFuncA type="linear" slope="3"/></feComponentTransfer></filter>'
+       f'<defs>'
        f'{"".join(masks)}</defs>\n'
-       f'<g fill="{RED}">{"".join(glow)}{"".join(crisp)}</g>\n</svg>\n')
+       f'<g fill="{RED}">{"".join(crisp)}</g>\n</svg>\n')
 open("assets/claws.svg", "w").write(svg)
 print(uid, "scratches,", len(svg), "bytes")
