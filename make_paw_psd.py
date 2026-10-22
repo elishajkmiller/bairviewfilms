@@ -1,5 +1,5 @@
 """Write a layered PSD of the bear tracks: groups Front left, Front right, Hind left, Hind right (the right ones start
-hidden), each with its pixel layers (Pad 1-3, Heel, Toe 1-5, Claw 1-5). Front and hind sit side by side.
+hidden), each with its pixel layers (Pad 1-3, Heel 1-2, Toe 1-5, Claw 1-5). Front and hind sit side by side.
 Needs Pillow and psd-tools:  python3 make_paw_psd.py out.psd   (run from the folder holding paw_shape.py)"""
 import sys
 

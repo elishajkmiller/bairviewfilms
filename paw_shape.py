@@ -1,6 +1,6 @@
 """Geometry of the BairView bear tracks, in the bear logo's language: straight edges and sharp facets.
 FRONT print: wide faceted pad cut by two claw slashes, five blade toes, long curved claw marks.
-HIND print: longer and narrower: a smaller slashed pad, a separate heel pad, shorter claws.
+HIND print: longer and narrower: a smaller slashed pad, a short wide heel pad cut by the same slashes, shorter claws.
 Upright, toes up, left foot. Shared by make_paws.py (SVG for the site), make_paw_psd.py and make_paw_png.py.
 Width and height of each print are measured from the drawing, with a margin."""
 import math
@@ -20,7 +20,7 @@ KINDS = {
         claw=(54, 7.5)),
     "hind": dict(
         pad=[(200, 196), (284, 226), (314, 290), (266, 352), (200, 382), (134, 352), (86, 290), (116, 226)],
-        heel=[(152, 392), (248, 392), (266, 448), (238, 528), (200, 550), (162, 528), (134, 452)],
+        heel=[(126, 392), (274, 392), (292, 430), (266, 486), (200, 508), (134, 486), (108, 430)],
         toes=[(62, 222, -30, 42, 78), (122, 146, -12, 50, 92), (200, 116, 0, 54, 98), (278, 146, 12, 50, 92), (338, 222, 30, 42, 78)],
         claw=(32, 6)),
 }
@@ -47,10 +47,17 @@ def clip(poly, nx, ny, c, keep_ge):
     return out
 
 
-def pad_pieces(pad):
+def _area(poly):
+    return abs(sum(p[0] * q[1] - q[0] * p[1] for p, q in zip(poly, poly[1:] + poly[:1]))) / 2
+
+
+def pad_pieces(pad, cy=None):
+    """The pad cut into up to three pieces by two parallel slashes. cy is the height the cuts are centred on, so a
+    second piece (the hind heel) can be cut by the same two lines."""
     a = math.radians(SLIT_ANGLE)
     nx, ny = math.cos(a), math.sin(a)             # across the cuts
-    cy = (min(p[1] for p in pad) + max(p[1] for p in pad)) / 2
+    if cy is None:
+        cy = (min(p[1] for p in pad) + max(p[1] for p in pad)) / 2
     mid = nx * 200 + ny * cy
     edges = [-1e9] + [mid + o for o in SLIT_AT] + [1e9]
     pieces = []
@@ -60,7 +67,8 @@ def pad_pieces(pad):
             poly = clip(poly, nx, ny, edges[i] + SLIT_GAP / 2, True)
         if i < 2:
             poly = clip(poly, nx, ny, edges[i + 1] - SLIT_GAP / 2, False)
-        pieces.append(poly)
+        if len(poly) >= 3 and _area(poly) > 500:  # a cut can leave a tiny sliver at the edge: leave it out
+            pieces.append(poly)
     return pieces
 
 
@@ -90,9 +98,10 @@ def claw(cx, cy, ang, w, h, length, width):
 
 def _raw(kind, with_claws=True):
     k = KINDS[kind]
-    out = [(f"Pad {i + 1}", p) for i, p in enumerate(pad_pieces(k["pad"]))]
-    if k["heel"]:
-        out.append(("Heel", k["heel"]))
+    cy = (min(p[1] for p in k["pad"]) + max(p[1] for p in k["pad"])) / 2
+    out = [(f"Pad {i + 1}", p) for i, p in enumerate(pad_pieces(k["pad"], cy))]
+    if k["heel"]:  # cut by the same two lines as the pad, so the slashes run on through the heel
+        out += [(f"Heel {i + 1}", p) for i, p in enumerate(pad_pieces(k["heel"], cy))]
     out += [(f"Toe {i + 1}", toe(*t)) for i, t in enumerate(k["toes"])]
     if with_claws:
         out += [(f"Claw {i + 1}", claw(*t, *k["claw"])) for i, t in enumerate(k["toes"])]
