@@ -1,6 +1,6 @@
 /**
  * Receives the contact form on bairviewfilms.com/contact.html.
- * Bound to the Google Sheet that holds the sign-ups (Extensions > Apps Script).
+ * Writes to the Google Sheet that holds the sign-ups (bound to it, or set SHEET_ID).
  * Appends one row per submission and emails NOTIFY_EMAIL.
  *
  * Deploy: Deploy > New deployment > Web app, Execute as: Me, Who has access: Anyone.
@@ -8,6 +8,8 @@
  * After changing this file, Deploy > Manage deployments > edit > New version.
  */
 var NOTIFY_EMAIL = "kalebfobair@gmail.com";
+// Leave empty when the script is opened from the sheet (Extensions > Apps Script); set it for a standalone script.
+var SHEET_ID = "";
 var SHEET_NAME = "Sign-ups";
 var FIELDS = [
   ["name", "Name"], ["email", "Email"], ["type", "Type"],
@@ -33,7 +35,7 @@ function doPost(e) {
   var lock = LockService.getScriptLock();
   lock.waitLock(20000);
   try {
-    var ss = SpreadsheetApp.getActiveSpreadsheet();
+    var ss = SHEET_ID ? SpreadsheetApp.openById(SHEET_ID) : SpreadsheetApp.getActiveSpreadsheet();
     var sheet = ss.getSheetByName(SHEET_NAME) || ss.insertSheet(SHEET_NAME);
     if (sheet.getLastRow() === 0) {
       sheet.appendRow(["Received"].concat(FIELDS.map(function (f) { return f[1]; })));
