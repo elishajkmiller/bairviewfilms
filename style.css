@@ -155,3 +155,6 @@ footer { background:rgba(10,10,10,.55); border-top:1px solid var(--line); paddin
 .vthumb:hover i { background:var(--brand); }
 .vthumb:focus-visible { outline:3px solid var(--accent); outline-offset:3px; }
 @media (max-width:700px) { .bts .rail { flex:none; height:200px; } }
+
+/* BTS page: thin vertical lines in the BairView palette red (#800E13, from the Drive palette image) */
+body:has(.bts) { background-image:repeating-linear-gradient(90deg,transparent 0 139px,#800E13 139px 140px); }
