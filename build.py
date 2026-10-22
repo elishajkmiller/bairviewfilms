@@ -240,7 +240,7 @@ for s in c.get("bts", {}).get("sections", []):
                 label = ' aria-hidden="true" tabindex="-1"' if dup else f' aria-label="Open photo {i + 1}"'
                 out.append(
                     f'        <button type="button" class="rail-t" data-i="{i}" data-full="{p}"{label}>'
-                    f'<img src="assets/bts/thumb/{key}.jpg" alt="" loading="lazy"></button>')
+                    f'<img src="assets/bts/thumb/{key}.jpg" alt="" loading="lazy" decoding="async"></button>')
             return "\n".join(out)
         row.append(f'''<div class="rail" style="--dur:{len(shots) * 6}s;--avg:{colors.get(slug, "#2a2a2a")}" role="region" aria-label="{esc(titles[slug])} behind the scenes photos">
       <div class="rail-track">
@@ -256,7 +256,10 @@ more = ""
 if c["bts"].get("playlist"):
     more = (f'<p class="ext"><a href="https://www.youtube.com/playlist?list={esc(c["bts"]["playlist"])}" rel="noopener">'
             "Full playlist on YouTube</a></p>")
-write("bts.html", page("Behind the Scenes | Bairview Films", c["bts"]["intro"], f"""<section class="wrap bts">
+claws = open("assets/claws.html").read() if os.path.exists("assets/claws.html") else ""
+write("bts.html", page("Behind the Scenes | Bairview Films", c["bts"]["intro"], f"""<div class="claws" aria-hidden="true">
+{claws}</div>
+<section class="wrap bts">
   <h1>Behind the Scenes</h1>
   {more}
   {chr(10).join(blocks)}

@@ -156,5 +156,13 @@ footer { background:rgba(10,10,10,.55); border-top:1px solid var(--line); paddin
 .vthumb:focus-visible { outline:3px solid var(--accent); outline-offset:3px; }
 @media (max-width:700px) { .bts .rail { flex:none; height:200px; } }
 
-/* BTS page: claw marks (assets/claws.svg, made by make_claws.py) in the BairView palette red #800E13 */
-body:has(.bts) { background:var(--bg) url(assets/claws.svg) 0 0 / 1000px auto repeat; }
+/* BTS page: claw marks in the BairView palette red #800E13. A fixed layer of small inline SVGs (assets/claws.html,
+   made by make_claws.py): the fade runs on the compositor and only each tiny SVG repaints for the scratch-in. */
+.claws { position:fixed; inset:0; z-index:-1; pointer-events:none; overflow:hidden; }
+.claw { position:absolute; fill:#800E13; will-change:opacity; animation:claw-fade 12s infinite; }
+.claw path { clip-path:inset(0 0 100% 0); animation:claw-draw 12s infinite; }
+@keyframes claw-draw { 0% { clip-path:inset(0 0 100% 0); animation-timing-function:cubic-bezier(.2,.7,.3,1); } 6%,96% { clip-path:inset(0); } 97%,100% { clip-path:inset(0 0 100% 0); } }
+@keyframes claw-fade { 0%,76% { opacity:1; } 94%,100% { opacity:0; } }
+@media (prefers-reduced-motion:reduce) { .claw, .claw path { animation:none; clip-path:none; } }
+.bts .rail { contain:paint; }
+.bts .rail-track { will-change:transform; }

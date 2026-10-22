@@ -38,6 +38,18 @@
 
   var rails = document.querySelectorAll(".rail");
   if (!rails.length) { return; }
+  // strips that are off screen stand still, so only the ones in view are animating
+  if ("IntersectionObserver" in window) {
+    var io = new IntersectionObserver(function (entries) {
+      var j;
+      for (j = 0; j < entries.length; j++) {
+        entries[j].target.querySelector(".rail-track").style.animationPlayState = entries[j].isIntersecting ? "running" : "paused";
+      }
+    });
+    var q;
+    for (q = 0; q < rails.length; q++) { io.observe(rails[q]); }
+  }
+
   var lb = document.createElement("div");
   lb.className = "car-lb";
   lb.hidden = true;
