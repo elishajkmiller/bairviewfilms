@@ -167,13 +167,13 @@ footer { background:rgba(10,10,10,.55); border-top:1px solid var(--line); paddin
 .bts .rail { contain:paint; }
 .bts .rail-track { will-change:transform; }
 
-/* About page: a trail of bear paw prints (assets/paws.html, made by make_paws.py) in the bear logo's red #850026.
-   One fixed layer; each print fades in once, one after another, then stays. */
-.paws { position:fixed; inset:0; z-index:-1; pointer-events:none; overflow:hidden; }
+/* About page: a trail of bear tracks (assets/paws.html, made by make_paws.py). One fixed layer in front of the page (under the
+   header), 60% see-through so the text under a print stays readable; each print fades in once, one after another, then stays. */
+.paws { position:fixed; inset:0; z-index:4; opacity:.6; pointer-events:none; overflow:hidden; }
+.paws svg { fill:#D7003C; } /* at 60% over the page black this comes out as the logo red, 850026 */
 .paws svg { display:block; position:absolute; inset:0; }
 .paws .trail-tall { display:none; }
 @media (max-aspect-ratio:1/1) { .paws .trail-wide { display:none; } .paws .trail-tall { display:block; } }
 .paw { opacity:0; animation:paw-in .6s ease-out var(--d) both; }
 @keyframes paw-in { from { opacity:0; } to { opacity:1; } }
 @media (prefers-reduced-motion:reduce) { .paw { animation:none; opacity:1; } }
-.about > div { background:var(--bg); padding:20px 24px; margin:-20px -24px; }

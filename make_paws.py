@@ -63,8 +63,8 @@ def trail(cls, view, p0, p1, p2, size, stride, behind, side):
             f'fill="{RED}">\n' + "\n".join(items) + "\n</svg>")
 
 
-# wide: along the bottom and up the right edge, inside y 130..870 so wide screens do not crop it
-wide = trail("trail-wide", (1600, 1000), (150, 850), (1560, 960), (1450, 150), 88, 310, 120, 26)
+# wide: across the lower right of the page, over the text, and up the right edge, inside y 130..870 so wide screens do not crop it
+wide = trail("trail-wide", (1600, 1000), (150, 850), (1000, 950), (1450, 150), 88, 310, 120, 26)
 # tall: up the right edge of a phone, prints half off the screen so they stay out of the text
 tall = trail("trail-tall", (400, 1000), (392, 930), (440, 600), (396, 90), 66, 240, 90, 18)
 open("assets/paws.html", "w").write(
