@@ -54,7 +54,7 @@ footer { background:rgba(10,10,10,.55); border-top:1px solid var(--line); paddin
 .about p { margin-bottom:16px; }
 .portrait { width:100%; display:block; }
 .foot-bear { height:36px; width:auto; }
-@media (max-width:700px) { .film-top, .about { grid-template-columns:1fr; } .about { gap:96px; } .poster { max-width:220px; } .portrait { max-width:300px; } .laurels img { height:84px; } }
+@media (max-width:700px) { .film-top, .about { grid-template-columns:1fr; } .about { gap:96px; } .about.side { gap:32px; } .poster { max-width:220px; } .portrait { max-width:300px; } .laurels img { height:84px; } }
 .reel { position:fixed; inset:0; z-index:-1; background:#000; }
 .reel video { display:block; width:100%; height:100%; object-fit:cover; }
 .over { background:linear-gradient(to bottom,rgba(10,10,10,.3),rgba(10,10,10,.55)); padding-top:28px; min-height:calc(100vh - 70px); }

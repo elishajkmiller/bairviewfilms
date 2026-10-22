@@ -1,5 +1,4 @@
-/* About page: a trail of bear tracks walks down the gap between the photo and the text, the full height of the page (across, when the page is one
-   column and the photo sits above the text). The trail is laid out from the measured positions of the photo and the
+/* About page: a trail of bear tracks walks down the gap between the photo and the text, the full height of the page (in one column: down the right side of the photo when there is room, otherwise across below it). The trail is laid out from the measured positions of the photo and the
    text, so it works at any width; the prints fade in one after another and then stay. */
 (function () {
   var sec = document.querySelector(".about");
@@ -23,6 +22,7 @@
   function lane() {
     var sx = window.pageXOffset, sy = window.pageYOffset;
     var t = box.getBoundingClientRect();
+    sec.classList.remove("side");
     if (!photo) { return null; }
     var p = photo.getBoundingClientRect();
     if (t.left >= p.right - 1) {
@@ -30,12 +30,21 @@
       var m = main.getBoundingClientRect();   // the walk runs the whole height of the page, header to footer
       return { a: [gx, m.top + sy], b: [gx, m.bottom + sy], w: t.left - p.right };
     }
+    // one column: if there is room to the right of the photo the bear walks down that side, otherwise across below it
+    var room = t.right - p.right;
+    if (room >= 56) {
+      sec.classList.add("side");
+      p = photo.getBoundingClientRect();
+      t = box.getBoundingClientRect();
+      var rx = (p.right + t.right) / 2 + sx;
+      return { a: [rx, p.top + sy], b: [rx, p.bottom + sy], w: room, k: 0.55 };
+    }
     var gy = (p.bottom + t.top) / 2 + sy;
     return { a: [p.left + sx, gy], b: [Math.max(t.right, p.right) + sx, gy], w: t.top - p.bottom };
   }
 
   function trail(ln) {
-    var size = Math.max(30, Math.min(60, ln.w * 0.45));   // height of a front print
+    var size = Math.max(30, Math.min(60, ln.w * (ln.k || 0.45)));   // height of a front print
     var stride = size * 2.5, behind = size * 1.2, side = size * 0.22;
     var dx = ln.b[0] - ln.a[0], dy = ln.b[1] - ln.a[1], len = Math.hypot(dx, dy);
     var ux = dx / len, uy = dy / len;
