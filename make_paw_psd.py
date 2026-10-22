@@ -1,4 +1,4 @@
-"""Write a layered PSD of the paw print (pixel layers: Pad, Toe 1-4, Claw 1-4, plus a mirrored right paw group).
+"""Write a layered PSD of the paw print (pixel layers: Pad 1-3, Toe 1-5, Claw 1-5, plus a mirrored right paw group).
 Needs Pillow and psd-tools:  python3 make_paw_psd.py out.psd   (run from the folder holding paw_shape.py)"""
 import sys
 
