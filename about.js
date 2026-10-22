@@ -1,7 +1,7 @@
 /* About page: a trail of bear tracks walks across the text and the text makes room for each print.
    The prints are laid out from the size of the text block (so it works at any width); every word is wrapped in a
    span, and where a print overlaps a line a spacer is put into that line, so the words flow around it the way text
-   wraps around a picture. Each print fades in and its gap opens, one after another, then stays. */
+   wraps around a picture. For each print the gap opens first and the print fades into it, one print after another, then it stays. */
 (function () {
   var sec = document.querySelector(".about");
   var box = document.querySelector(".about-text");
@@ -54,8 +54,8 @@
   }
 
   function trail(tx, ty, tw, th) {
-    // a curve from the bottom left of the text, through its middle, to above its right edge
-    var p0 = [tx - 10, ty + th + 30], p1 = [tx + tw * 0.62, ty + th * 0.7], p2 = [tx + tw + 50, ty - 10];
+    // the bear walks down: from above the right edge of the text, through its middle, to below its left
+    var p0 = [tx + tw + 50, ty - 10], p1 = [tx + tw * 0.62, ty + th * 0.7], p2 = [tx - 10, ty + th + 30];
     var size = Math.max(64, Math.min(86, tw * 0.18));   // height of a front print
     var stride = size * 3.1, behind = size * 1.35, side = size * 0.28;
     var pts = [], cum = [0], i;
@@ -81,7 +81,7 @@
         var sc = size / FRONT[1];
         out.push({
           kind: kb[0], right: right, ang: q[2], w: d[0] * sc, h: d[1] * sc,
-          x: q[0] + Math.cos(rad) * off, y: q[1] + Math.sin(rad) * off, r: size * 0.44
+          x: q[0] + Math.cos(rad) * off, y: q[1] + Math.sin(rad) * off, r: size * 0.48
         });
       });
       pos += stride;
@@ -107,8 +107,8 @@
       var done = true;
       for (i = 0; i < lines.length && done; i++) {
         var mid = (lines[i].t + lines[i].b) / 2, dy = Math.abs(mid - p.y);
-        if (dy >= p.r + (lines[i].b - lines[i].t) / 2) { continue; }
-        var hc = Math.sqrt(Math.max(0, p.r * p.r - Math.min(dy, p.r) * Math.min(dy, p.r))) + 6;
+        if (dy >= p.r * 0.85) { continue; }   // a line the print only grazes is left alone
+        var hc = Math.sqrt(Math.max(0, p.r * p.r - Math.min(dy, p.r) * Math.min(dy, p.r))) + 12;
         var x1 = p.x - hc, x2 = p.x + hc;
         lines[i].w.sort(function (a, b) { return a.l - b.l; });
         for (j = 0; j < lines[i].w.length; j++) {
@@ -118,6 +118,7 @@
             g.className = "gap";
             g.style.width = Math.ceil(x2 - w.l) + "px";
             g.setAttribute("data-w", g.style.width);
+            g.setAttribute("data-at", p.at);
             w.el.parentNode.insertBefore(g, w.el);
             gaps.push({ el: g, at: p.at, owner: p });
             done = false;
@@ -145,28 +146,52 @@
     var sx = window.pageXOffset, sy = window.pageYOffset;
     var b = box.getBoundingClientRect();
     var prints = trail(b.left + sx, b.top + sy, b.width, b.height);
-    prints.forEach(function (p, i) { p.at = 0.4 + i * 0.6; });
+    // prints land from the top down: a gap is sized for the lines above it already being in place, so the upper gaps
+    // have to open first or the text under a print would still be in its old position
+    prints.slice().sort(function (a, c) { return a.y - c.y; }).forEach(function (p, i) { p.at = 0.4 + i * 0.75; });
     // the layer is as wide as the screen and as tall as the section
     var lr0 = layer.getBoundingClientRect();
     var ox = lr0.left + sx, oy = lr0.top + sy;
 
     // fit the gaps print by print from the top down; a gap can reflow a line an earlier print was fitted to, so go round
-    // again, redoing each print's own gaps, until nothing changes
+    // again, redoing each print's own gaps, until nothing changes. Then drop any gap that ended up away from its print
+    // (it was sized for an older layout) and fit once more.
     var order = prints.slice().sort(function (a, c) { return a.y - c.y; });
-    var pass, changed;
-    for (pass = 0; pass < 8; pass++) {
-      changed = false;
-      order.forEach(function (p) {
-        var before = ownWidths(p);
-        gaps = gaps.filter(function (g) {
-          if (g.owner !== p) { return true; }
-          g.el.parentNode.removeChild(g.el);
-          return false;
+    function settle(passes) {
+      var pass, changed;
+      for (pass = 0; pass < passes; pass++) {
+        changed = false;
+        order.forEach(function (p) {
+          var before = ownWidths(p);
+          gaps = gaps.filter(function (g) {
+            if (g.owner !== p) { return true; }
+            g.el.parentNode.removeChild(g.el);
+            return false;
+          });
+          makeRoom(p);
+          if (ownWidths(p) !== before) { changed = true; }
         });
-        makeRoom(p);
-        if (ownWidths(p) !== before) { changed = true; }
+        if (!changed) { return; }
+      }
+    }
+    function prune() {
+      var gone = false, px = window.pageXOffset, py = window.pageYOffset;
+      gaps = gaps.filter(function (g) {
+        var r = g.el.getBoundingClientRect(), p = g.owner;
+        var near = Math.abs(r.top + py - p.y) < p.r + 22 && r.right + px > p.x - p.r - 30 && r.left + px < p.x + p.r + 30;
+        if (near) { return true; }
+        g.el.parentNode.removeChild(g.el);
+        gone = true;
+        return false;
       });
-      if (!changed) { break; }
+      return gone;
+    }
+    settle(8);
+    var round;
+    for (round = 0; round < 5; round++) {
+      var gone = prune(), n = gaps.length;
+      order.forEach(makeRoom);       // any word still touching a print gets a gap of its own
+      if (!gone && gaps.length === n) { break; }
     }
 
     prints.forEach(function (p) {
@@ -178,7 +203,7 @@
       s.style.left = (p.x - ox).toFixed(1) + "px";
       s.style.top = (p.y - oy).toFixed(1) + "px";
       s.style.transform = "translate(-50%,-50%) rotate(" + p.ang.toFixed(1) + "deg)";
-      s.style.setProperty("--d", p.at + "s");
+      s.style.setProperty("--d", (p.at + 0.5) + "s");   // the print fades in after its gap has opened
       var u = document.createElementNS(NS, "use");
       u.setAttributeNS(XL, "href", "#paw-" + p.kind[0] + (p.right ? "r" : "l"));
       u.setAttribute("href", "#paw-" + p.kind[0] + (p.right ? "r" : "l"));
@@ -196,7 +221,7 @@
     void document.body.offsetWidth;
     gaps.forEach(function (g) {
       g.el.style.transition = "";
-      timers.push(setTimeout(function () { g.el.style.width = g.el.getAttribute("data-w"); }, (g.at + 0.3) * 1000));
+      timers.push(setTimeout(function () { g.el.style.width = g.el.getAttribute("data-w"); }, g.at * 1000));
     });
   }
 
