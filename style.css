@@ -175,3 +175,29 @@ main { position:relative; }
 .paws.now svg.paw { animation:none; opacity:1; }
 @keyframes paw-in { from { opacity:0; } to { opacity:1; } }
 @media (prefers-reduced-motion:reduce) { .paws svg.paw { animation:none; opacity:1; } }
+
+/* Film pages: the poster is the label on a film cartridge and the stills are the film coming out of it, so the strip runs
+   away from the cartridge (left to right) and has sprocket holes along both edges. .film is only on film-page rails. */
+.cart { position:relative; z-index:2; padding:12px 30px 12px 12px; border-radius:16px 10px 10px 16px; border:1px solid #3a3a3a;
+  background:linear-gradient(160deg,#2b2b2b,#141414 55%,#1d1d1d); box-shadow:0 8px 22px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,255,255,.12); }
+.cart::before { content:""; position:absolute; top:-7px; left:34px; width:46px; height:7px; border-radius:4px 4px 0 0; background:#242424; border:1px solid #3a3a3a; border-bottom:0; }
+.cart::after { content:""; position:absolute; right:-4px; top:50%; width:9px; height:224px; margin-top:-112px; border-radius:5px;
+  background:#030303; box-shadow:inset 0 0 0 1px #3d3d3d, inset 2px 0 4px rgba(0,0,0,.9); }
+.strip-row .cart .poster { height:300px; width:auto; border-radius:3px; box-shadow:0 0 0 2px #050505; }
+.rail.film { height:252px; margin-top:36px; }
+.poster-col + .rail.film { margin-left:-22px; }
+.rail.film .rail-track { position:relative; box-sizing:border-box; padding:22px 0; background:#0b0b0b; animation-direction:reverse; }
+.rail.film .rail-track::before, .rail.film .rail-track::after { content:""; position:absolute; left:0; width:100%; height:22px;
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='22'%3E%3Crect x='9' y='6' width='14' height='10' rx='2.5' fill='%23d9d3c4' fill-opacity='.9'/%3E%3C/svg%3E") repeat-x; }
+.rail.film .rail-track::before { top:0; }
+.rail.film .rail-track::after { bottom:0; }
+.rail.film .rail-t { width:320px; padding:0 5px; border:0; background:none; }
+.rail.film .rail-t img { box-sizing:border-box; border:2px solid var(--avg,#2a2a2a); background:#111; }
+@media (max-width:700px) {
+  .cart { margin:0 auto; width:max-content; }
+  .cart { padding-right:12px; } .cart::after { display:none; }
+  .poster-col + .rail.film { margin:20px 0 0; height:200px; }
+  .rail.film .rail-t { width:240px; }
+  .rail.film .rail-track { padding:18px 0; }
+  .rail.film .rail-track::before, .rail.film .rail-track::after { height:18px; background-position:0 -2px; background-size:32px 22px; }
+}

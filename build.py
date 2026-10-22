@@ -154,7 +154,7 @@ for f in films:
     row = ""
     if poster or shots:
         ext = f'<p class="ext">{link_list(f["links"])}</p>' if f.get("links") else ""
-        art = (f'<div class="poster-col"><img class="poster" src="../{poster}" alt="{esc(f["title"])} poster">{ext}</div>'
+        art = (f'<div class="poster-col"><div class="cart"><img class="poster" src="../{poster}" alt="{esc(f["title"])} poster"></div>{ext}</div>'
                if poster else "")
         reel = ""
         if shots:
@@ -164,7 +164,7 @@ for f in films:
                     f'        <button type="button" class="rail-t" data-i="{i}"{extra if dup else f" aria-label=\"Open still {i}\""}>'
                     f'<img src="../{p}" alt="" loading="lazy"></button>'
                     for i, p in enumerate(shots))
-            reel = f"""<div class="rail" style="--dur:{len(shots) * 6}s;--avg:{colors.get(slug, "#2a2a2a")}" role="region" aria-label="{esc(f['title'])} stills">
+            reel = f"""<div class="rail film" style="--dur:{len(shots) * 6}s;--avg:{colors.get(slug, "#2a2a2a")}" role="region" aria-label="{esc(f['title'])} stills">
       <div class="rail-track">
 {tiles(False)}
 {tiles(True)}
