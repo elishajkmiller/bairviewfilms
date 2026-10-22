@@ -1,7 +1,7 @@
 """Static site generator. Run: python3 build.py
-Reads content.json, writes index.html, about.html, contact.html and films/*.html.
+Reads content.json, writes index.html, bts.html, about.html, contact.html and films/*.html.
 Images come from assets/ (see prep_assets.py):
-  <slug>-still.jpg, posters/<slug>.jpg, stills/<slug>-NN.jpg, laurels/<slug>--<award>.png"""
+  <slug>-still.jpg, posters/<slug>.jpg, stills/<slug>-NN.jpg, laurels/<slug>--<award>.png, bts/ (prep_bts.py)"""
 import glob
 import json
 import os
@@ -59,6 +59,7 @@ def page(title, desc, body, depth=0, active=""):
   <a class="brand" href="{r}index.html"><img src="{r}assets/logo.png" alt="Bairview Films"></a>
   <nav>
     {link('index.html', 'Films', 'films')}
+    {link('bts.html', 'BTS', 'bts')}
     {link('about.html', 'About', 'about')}
     {link('contact.html', 'Contact', 'contact')}
   </nav>
@@ -207,11 +208,111 @@ write("about.html", page("About | Bairview Films", c["about"][0], f"""<section c
   </div>
 </section>""", active="about"))
 
-# Contact
-write("contact.html", page("Contact | Bairview Films", "Contact Bairview Films.", f"""<section class="wrap narrow">
+# Behind the scenes: photo walls per film, plus optional interview videos and links from content.json
+sizes = json.load(open("assets/bts/sizes.json")) if os.path.exists("assets/bts/sizes.json") else {}
+titles = {f["slug"]: f["title"] for f in films}
+blocks = []
+for s in c.get("bts", {}).get("sections", []):
+    slug = s["slug"]
+    shots = sorted(glob.glob(f"assets/bts/{slug}-*.jpg"))
+    if not (shots or s.get("videos") or s.get("links")):
+        continue
+    inner = []
+    for v in s.get("videos", []):
+        inner.append(
+            f'<div class="video"><iframe src="https://www.youtube-nocookie.com/embed/{esc(v["id"])}" '
+            f'title="{esc(v.get("title", titles[slug] + " behind the scenes"))}" loading="lazy" allowfullscreen></iframe></div>')
+    if s.get("links"):
+        inner.append(f'<p class="ext">{link_list(s["links"])}</p>')
+    if shots:
+        tiles = []
+        for i, p in enumerate(shots):
+            key = os.path.basename(p)[:-4]
+            w, h = sizes.get(key, (640, 427))
+            tiles.append(
+                f'    <button type="button" class="bts-t" data-full="{p}" aria-label="Open photo {i + 1}">'
+                f'<img src="assets/bts/thumb/{key}.jpg" width="{w}" height="{h}" alt="" loading="lazy"></button>')
+        inner.append('<div class="bts-grid">\n' + "\n".join(tiles) + "\n  </div>")
+    blocks.append(
+        f'<h2 id="{slug}"><a href="films/{slug}.html">{esc(titles[slug])}</a></h2>\n  ' + "\n  ".join(inner))
+write("bts.html", page("Behind the Scenes | Bairview Films", c["bts"]["intro"], f"""<section class="wrap bts">
+  <h1>Behind the Scenes</h1>
+  <p class="lead">{esc(c["bts"]["intro"])}</p>
+  {chr(10).join(blocks)}
+  <script src="bts.js" defer></script>
+</section>""", active="bts"))
+
+# Contact: one form, the button picked decides which extra fields show (contact.js). Submissions go to the
+# Google Apps Script web app in site.form_endpoint (apps-script/Code.gs); without one the form opens an email.
+def field(name, label, kind="text", required=False, opts=None, hint=""):
+    req = " required" if required else ""
+    star = "" if required else ' <span class="opt">optional</span>'
+    if opts:
+        body = f'<select name="{name}" id="f-{name}"{req}><option value="">Choose one</option>' + "".join(
+            f"<option>{esc(o)}</option>" for o in opts) + "</select>"
+    elif kind == "textarea":
+        body = f'<textarea name="{name}" id="f-{name}" rows="5"{req}></textarea>'
+    else:
+        body = f'<input type="{kind}" name="{name}" id="f-{name}"{req}>'
+    note = f'<small>{hint}</small>' if hint else ""
+    return f'<div class="f"><label for="f-{name}">{esc(label)}{star}</label>\n    {body}{note}</div>'
+
+
+TYPES = [
+    ("hire", "Hire me", [
+        field("project_type", "Project type", required=True, opts=[
+            "Narrative film", "Commercial", "Music video", "Documentary", "Event or corporate", "Other"]),
+        field("timeline", "Timeline"),
+        field("budget", "Budget range", opts=[
+            "Under $1,000", "$1,000 to $5,000", "$5,000 to $15,000", "$15,000 to $50,000", "$50,000 and up", "Not sure yet"]),
+        field("heard", "How did you hear about me", opts=[
+            "Instagram", "YouTube", "A film festival", "A friend or colleague", "POW417", "Search", "Other"]),
+    ]),
+    ("join", "Join a project", [
+        field("role", "Role", required=True, opts=[
+            "Actor", "Director of photography", "Camera operator", "Sound", "Gaffer or grip", "Production design or art",
+            "Makeup or SFX", "Editor", "Composer", "Production assistant", "Other"]),
+        field("link", "Reel or portfolio link", kind="url"),
+        field("location", "Location"),
+    ]),
+    ("pow417", "POW417", [
+        field("pow_role", "How do you want to be involved", required=True, opts=["Volunteer", "Sponsor", "Compete"]),
+        '<p class="note">Want to compete? Register on <a href="https://pow417.com" rel="noopener">pow417.com</a>.</p>',
+    ]),
+    ("press", "Press or screenings", [
+        field("outlet", "Outlet or venue", required=True),
+        field("event_date", "Date", kind="date"),
+    ]),
+    ("reach", "Just reaching out", []),
+]
+type_btns = "\n".join(
+    f'    <label class="pick"><input type="radio" name="type" value="{esc(label)}" data-key="{key}" required>'
+    f"<span>{esc(label)}</span></label>" for key, label, _ in TYPES)
+type_sets = "\n".join(
+    f'  <fieldset class="extra" data-key="{key}" hidden disabled>\n    ' + "\n    ".join(fs) + "\n  </fieldset>"
+    for key, _, fs in TYPES if fs)
+write("contact.html", page("Contact | Bairview Films",
+    "Hire Bairview Films, join a project, volunteer or sponsor for POW417, or just say hello.", f"""<section class="wrap narrow">
   <h1>Contact</h1>
-  <p>For screenings, festival inquiries and collaboration.</p>
-  <p><a class="btn" href="mailto:{esc(site['email'])}">{esc(site['email'])}</a></p>
+  <p>Hire me to direct or produce, join a future project, get involved with POW417, or just say hello. Pick what fits and fill in the rest.</p>
+  <form id="contact" class="cform" method="post" action="{esc(site.get('form_endpoint', ''))}" data-endpoint="{esc(site.get('form_endpoint', ''))}" data-email="{esc(site['email'])}">
+  <div class="row2">
+    {field("name", "Name", required=True)}
+    {field("email", "Email", kind="email", required=True)}
+  </div>
+  <fieldset class="types"><legend>What brings you here</legend>
+{type_btns}
+  </fieldset>
+{type_sets}
+  <div class="msg" hidden>
+    {field("message", "Message", kind="textarea")}
+  </div>
+  <input class="hp" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+  <button class="btn" type="submit" hidden>Send</button>
+  <p class="status-line" role="status" aria-live="polite"></p>
+  </form>
+  <noscript><p>This form needs JavaScript. Email <a href="mailto:{esc(site['email'])}">{esc(site['email'])}</a> instead.</p></noscript>
+  <script src="contact.js" defer></script>
 </section>""", active="contact"))
 
 print("built")

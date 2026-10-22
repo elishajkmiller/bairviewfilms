@@ -25,7 +25,8 @@
         "label": "Instagram",
         "url": "https://www.instagram.com/kalebfobair/"
       }
-    ]
+    ],
+    "form_endpoint": ""
   },
   "about": [
     "BairView Films is an independent production company dedicated to original storytelling through film.",
@@ -35,7 +36,11 @@
     {
       "slug": "solus",
       "title": "Solus",
+      "genre": "Sci-Fi",
+      "runtime": "20 min",
       "year": 2026,
+      "logline": "Is your soul worth taking?",
+      "synopsis": "When unknown entities descend upon Earth, a recluse must navigate the consequences of their choices and society's fall.",
       "links": [
         {
           "label": "IMDb",
@@ -145,5 +150,25 @@
         }
       ]
     }
-  ]
+  ],
+  "bts": {
+    "intro": "Set photos, interviews and making-of from past productions.",
+    "sections": [
+      {
+        "slug": "the-lost-place",
+        "videos": [],
+        "links": []
+      },
+      {
+        "slug": "roadkill",
+        "videos": [],
+        "links": []
+      },
+      {
+        "slug": "room-10",
+        "videos": [],
+        "links": []
+      }
+    ]
+  }
 }

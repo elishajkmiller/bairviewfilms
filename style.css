@@ -90,3 +90,38 @@ footer { background:rgba(10,10,10,.55); border-top:1px solid var(--line); paddin
 .card img.whole { object-fit:contain; }
 .about p a { border-bottom:1px solid var(--accent); transition:color .2s; }
 .about p a:hover { color:var(--accent); }
+[hidden] { display:none !important; }
+.lead { color:var(--dim); font-size:1.1rem; margin-bottom:8px; }
+.bts { max-width:1180px; margin:0 auto; }
+.bts h2 a:hover { color:var(--fg); }
+.bts h2 { margin-top:56px; }
+.bts .video { max-width:760px; }
+.bts-grid { column-width:260px; column-gap:10px; }
+.bts-t { display:block; width:100%; margin:0 0 10px; padding:0; border:0; background:#111; cursor:zoom-in; break-inside:avoid; }
+.bts-t img { display:block; width:100%; height:auto; transition:opacity .2s; }
+.bts-t:hover img { opacity:.82; }
+.bts-t:focus-visible { outline:3px solid var(--accent); outline-offset:2px; }
+.cform { margin-top:24px; }
+.cform label { display:block; margin:18px 0 6px; font-size:.82rem; text-transform:uppercase; letter-spacing:.12em; color:var(--dim); }
+.cform .opt { text-transform:none; letter-spacing:0; font-size:.78rem; opacity:.7; margin-left:6px; }
+.cform input[type=text], .cform input[type=email], .cform input[type=url], .cform input[type=date], .cform select, .cform textarea { width:100%; padding:12px 14px; background:#141414; color:var(--fg); border:1px solid var(--line); border-radius:0; font:inherit; }
+.cform input:focus, .cform select:focus, .cform textarea:focus { outline:2px solid var(--brand); outline-offset:0; border-color:var(--brand); }
+.cform .row2 { display:grid; grid-template-columns:1fr 1fr; gap:0 20px; }
+.cform fieldset { border:0; padding:0; margin:0; min-width:0; }
+.cform legend { padding:0; margin:28px 0 12px; font-size:.82rem; text-transform:uppercase; letter-spacing:.12em; color:var(--dim); }
+.types { display:flex; flex-wrap:wrap; gap:10px; }
+.types legend { width:100%; margin-top:36px; }
+.cform .pick { margin:0; cursor:pointer; }
+.pick input { position:absolute; opacity:0; pointer-events:none; }
+.pick span { display:block; padding:11px 20px; border:1px solid var(--dim); color:var(--fg); letter-spacing:.1em; font-size:.78rem; text-transform:uppercase; font-weight:700; }
+.pick:hover span { border-color:var(--fg); }
+.pick input:checked + span { background:var(--fg); color:var(--bg); border-color:var(--fg); }
+.pick input:focus-visible + span { outline:3px solid var(--accent); outline-offset:2px; }
+.cform small { display:block; margin-top:6px; color:var(--dim); }
+.cform .note a { border-bottom:1px solid var(--accent); }
+.cform .note { margin-top:16px; }
+.cform .hp { position:absolute; left:-9999px; width:1px; height:1px; opacity:0; }
+.cform .btn { border:0; cursor:pointer; font-family:inherit; margin-top:24px; }
+.cform .btn:disabled { opacity:.5; cursor:default; }
+.status-line { margin-top:14px; color:var(--dim); min-height:1.6em; }
+@media (max-width:600px) { .cform .row2 { grid-template-columns:1fr; } }

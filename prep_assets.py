@@ -69,6 +69,12 @@ save_jpg(os.path.join(extra, "reel-poster.jpg"), f"{out}/reel-poster.jpg", 1600)
 save_jpg(find("THE LOST PLACE/4BC8FF70*.jpeg"), f"{out}/posters/the-lost-place.jpg", 800)
 save_jpg(find("ROADKILL/ROADKILL POSTER.PNG"), f"{out}/posters/roadkill.jpg", 800)
 save_jpg(find("SOLUS/Solus Official Poster*.PNG"), f"{out}/posters/solus.jpg", 800)
+# The Room 10 poster file has a white margin around the black poster: crop to the poster
+_p = Image.open(find("ROOM 10/ROOM 10 Poster.jpeg")).convert("RGB")
+_box = Image.eval(_p.convert("L"), lambda v: 255 if v < 235 else 0).getbbox()
+_p.crop(_box).save(f"{out}/posters/room-10-src.jpg", quality=92)
+save_jpg(f"{out}/posters/room-10-src.jpg", f"{out}/posters/room-10.jpg", 800)
+os.remove(f"{out}/posters/room-10-src.jpg")
 
 # Portrait
 save_jpg(find("Photos of Kaleb/*Pic 2.jpg"), f"{out}/kaleb.jpg", 900)

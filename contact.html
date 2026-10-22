@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Contact | Bairview Films</title>
-<meta name="description" content="Contact Bairview Films.">
+<meta name="description" content="Hire Bairview Films, join a project, volunteer or sponsor for POW417, or just say hello.">
 <meta property="og:title" content="Contact | Bairview Films">
-<meta property="og:description" content="Contact Bairview Films.">
+<meta property="og:description" content="Hire Bairview Films, join a project, volunteer or sponsor for POW417, or just say hello.">
 <meta property="og:image" content="https://bairviewfilms.com/assets/reel-poster.jpg">
 <link rel="icon" type="image/png" href="assets/favicon.png">
 <link rel="stylesheet" href="style.css">
@@ -17,6 +17,7 @@
   <a class="brand" href="index.html"><img src="assets/logo.png" alt="Bairview Films"></a>
   <nav>
     <a href="index.html">Films</a>
+    <a href="bts.html">BTS</a>
     <a href="about.html">About</a>
     <a href="contact.html" aria-current="page">Contact</a>
   </nav>
@@ -24,8 +25,60 @@
 <main>
 <section class="wrap narrow">
   <h1>Contact</h1>
-  <p>For screenings, festival inquiries and collaboration.</p>
-  <p><a class="btn" href="mailto:kalebfobair@gmail.com">kalebfobair@gmail.com</a></p>
+  <p>Hire me to direct or produce, join a future project, get involved with POW417, or just say hello. Pick what fits and fill in the rest.</p>
+  <form id="contact" class="cform" method="post" action="" data-endpoint="" data-email="kalebfobair@gmail.com">
+  <div class="row2">
+    <div class="f"><label for="f-name">Name</label>
+    <input type="text" name="name" id="f-name" required></div>
+    <div class="f"><label for="f-email">Email</label>
+    <input type="email" name="email" id="f-email" required></div>
+  </div>
+  <fieldset class="types"><legend>What brings you here</legend>
+    <label class="pick"><input type="radio" name="type" value="Hire me" data-key="hire" required><span>Hire me</span></label>
+    <label class="pick"><input type="radio" name="type" value="Join a project" data-key="join" required><span>Join a project</span></label>
+    <label class="pick"><input type="radio" name="type" value="POW417" data-key="pow417" required><span>POW417</span></label>
+    <label class="pick"><input type="radio" name="type" value="Press or screenings" data-key="press" required><span>Press or screenings</span></label>
+    <label class="pick"><input type="radio" name="type" value="Just reaching out" data-key="reach" required><span>Just reaching out</span></label>
+  </fieldset>
+  <fieldset class="extra" data-key="hire" hidden disabled>
+    <div class="f"><label for="f-project_type">Project type</label>
+    <select name="project_type" id="f-project_type" required><option value="">Choose one</option><option>Narrative film</option><option>Commercial</option><option>Music video</option><option>Documentary</option><option>Event or corporate</option><option>Other</option></select></div>
+    <div class="f"><label for="f-timeline">Timeline <span class="opt">optional</span></label>
+    <input type="text" name="timeline" id="f-timeline"></div>
+    <div class="f"><label for="f-budget">Budget range <span class="opt">optional</span></label>
+    <select name="budget" id="f-budget"><option value="">Choose one</option><option>Under $1,000</option><option>$1,000 to $5,000</option><option>$5,000 to $15,000</option><option>$15,000 to $50,000</option><option>$50,000 and up</option><option>Not sure yet</option></select></div>
+    <div class="f"><label for="f-heard">How did you hear about me <span class="opt">optional</span></label>
+    <select name="heard" id="f-heard"><option value="">Choose one</option><option>Instagram</option><option>YouTube</option><option>A film festival</option><option>A friend or colleague</option><option>POW417</option><option>Search</option><option>Other</option></select></div>
+  </fieldset>
+  <fieldset class="extra" data-key="join" hidden disabled>
+    <div class="f"><label for="f-role">Role</label>
+    <select name="role" id="f-role" required><option value="">Choose one</option><option>Actor</option><option>Director of photography</option><option>Camera operator</option><option>Sound</option><option>Gaffer or grip</option><option>Production design or art</option><option>Makeup or SFX</option><option>Editor</option><option>Composer</option><option>Production assistant</option><option>Other</option></select></div>
+    <div class="f"><label for="f-link">Reel or portfolio link <span class="opt">optional</span></label>
+    <input type="url" name="link" id="f-link"></div>
+    <div class="f"><label for="f-location">Location <span class="opt">optional</span></label>
+    <input type="text" name="location" id="f-location"></div>
+  </fieldset>
+  <fieldset class="extra" data-key="pow417" hidden disabled>
+    <div class="f"><label for="f-pow_role">How do you want to be involved</label>
+    <select name="pow_role" id="f-pow_role" required><option value="">Choose one</option><option>Volunteer</option><option>Sponsor</option><option>Compete</option></select></div>
+    <p class="note">Want to compete? Register on <a href="https://pow417.com" rel="noopener">pow417.com</a>.</p>
+  </fieldset>
+  <fieldset class="extra" data-key="press" hidden disabled>
+    <div class="f"><label for="f-outlet">Outlet or venue</label>
+    <input type="text" name="outlet" id="f-outlet" required></div>
+    <div class="f"><label for="f-event_date">Date <span class="opt">optional</span></label>
+    <input type="date" name="event_date" id="f-event_date"></div>
+  </fieldset>
+  <div class="msg" hidden>
+    <div class="f"><label for="f-message">Message <span class="opt">optional</span></label>
+    <textarea name="message" id="f-message" rows="5"></textarea></div>
+  </div>
+  <input class="hp" type="text" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+  <button class="btn" type="submit" hidden>Send</button>
+  <p class="status-line" role="status" aria-live="polite"></p>
+  </form>
+  <noscript><p>This form needs JavaScript. Email <a href="mailto:kalebfobair@gmail.com">kalebfobair@gmail.com</a> instead.</p></noscript>
+  <script src="contact.js" defer></script>
 </section>
 </main>
 <footer>
