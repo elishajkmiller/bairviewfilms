@@ -166,3 +166,13 @@ footer { background:rgba(10,10,10,.55); border-top:1px solid var(--line); paddin
 @media (prefers-reduced-motion:reduce) { .claw, .claw path { animation:none; clip-path:none; } }
 .bts .rail { contain:paint; }
 .bts .rail-track { will-change:transform; }
+
+/* About page: a trail of bear paw prints (assets/paws.html, made by make_paws.py) in the bear logo's red #850026.
+   One fixed layer; each print fades in once, one after another, then stays. */
+.paws { position:fixed; inset:0; z-index:-1; pointer-events:none; overflow:hidden; }
+.paws svg { display:block; position:absolute; inset:0; }
+.paws .trail-tall { display:none; }
+@media (max-aspect-ratio:1/1) { .paws .trail-wide { display:none; } .paws .trail-tall { display:block; } }
+.paw { opacity:0; animation:paw-in .6s ease-out var(--d) both; }
+@keyframes paw-in { from { opacity:0; } to { opacity:1; } }
+@media (prefers-reduced-motion:reduce) { .paw { animation:none; opacity:1; } }

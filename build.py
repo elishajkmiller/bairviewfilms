@@ -198,7 +198,10 @@ for f in films:
 paras = "\n".join(f"    <p>{rich(p)}</p>" for p in c["about"])
 portrait = exists("assets/kaleb.jpg")
 photo = f'<img class="portrait" src="{portrait}" alt="{esc(site["owner"])}">' if portrait else ""
-write("about.html", page("About | Bairview Films", c["about"][0], f"""<section class="wrap about">
+paws = open("assets/paws.html").read() if os.path.exists("assets/paws.html") else ""
+write("about.html", page("About | Bairview Films", c["about"][0], f"""<div class="paws" aria-hidden="true">
+{paws}</div>
+<section class="wrap about">
   {photo}
   <div>
     <h1>About</h1>
