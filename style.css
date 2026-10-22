@@ -186,9 +186,9 @@ main { position:relative; }
 .strip-row .cart .poster { height:300px; width:auto; border-radius:3px; box-shadow:0 0 0 2px #050505; }
 .rail.film { height:252px; margin-top:36px; }
 .poster-col + .rail.film { margin-left:-22px; }
-.rail.film .rail-track { position:relative; box-sizing:border-box; padding:22px 0; background:#0b0b0b; box-shadow:inset 0 4px 0 var(--brand), inset 0 -4px 0 var(--brand); animation-direction:reverse; }
+.rail.film .rail-track { position:relative; box-sizing:border-box; padding:22px 0; background:#272727; box-shadow:inset 0 4px 0 var(--brand), inset 0 -4px 0 var(--brand); animation-direction:reverse; }
 .rail.film .rail-track::before, .rail.film .rail-track::after { content:""; position:absolute; left:0; width:100%; height:22px;
-  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='22'%3E%3Crect x='9' y='6' width='14' height='10' rx='2.5' fill='%23d9d3c4' fill-opacity='.9'/%3E%3C/svg%3E") repeat-x; }
+  background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='22'%3E%3Crect x='9' y='6' width='14' height='10' rx='2.5' fill='%230a0a0a'/%3E%3C/svg%3E") repeat-x; }
 .rail.film .rail-track::before { top:0; }
 .rail.film .rail-track::after { bottom:0; }
 .rail.film .rail-t { width:320px; padding:0 5px; border:0; background:none; }
