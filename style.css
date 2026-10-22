@@ -144,7 +144,7 @@ footer { background:rgba(10,10,10,.55); border-top:1px solid var(--line); paddin
 .vid-col .vthumb { width:100%; border:0; padding:0; cursor:pointer; }
 .vid-col .vthumb.playing { cursor:default; }
 .vtabs { display:flex; flex-wrap:wrap; gap:6px; margin-top:8px; }
-.vtabs button { padding:6px 12px; background:none; border:1px solid var(--line); color:var(--dim); font:inherit; font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; cursor:pointer; }
+.vtabs button { padding:6px 12px; background:var(--bg); border:1px solid var(--line); color:var(--dim); font:inherit; font-size:.72rem; letter-spacing:.12em; text-transform:uppercase; cursor:pointer; }
 .vtabs button:hover { color:var(--fg); border-color:var(--dim); }
 .vtabs button.on { background:var(--fg); color:var(--bg); border-color:var(--fg); }
 .vcap { margin:8px 0 0; font-size:.8rem; line-height:1.4; color:var(--dim); }
@@ -156,5 +156,5 @@ footer { background:rgba(10,10,10,.55); border-top:1px solid var(--line); paddin
 .vthumb:focus-visible { outline:3px solid var(--accent); outline-offset:3px; }
 @media (max-width:700px) { .bts .rail { flex:none; height:200px; } }
 
-/* BTS page: thin vertical lines in the BairView palette red (#800E13, from the Drive palette image) */
-body:has(.bts) { background-image:repeating-linear-gradient(90deg,transparent 0 139px,#800E13 139px 140px); }
+/* BTS page: claw marks (assets/claws.svg, made by make_claws.py) in the BairView palette red #800E13 */
+body:has(.bts) { background:var(--bg) url(assets/claws.svg) 0 0 / 1000px auto repeat; }
