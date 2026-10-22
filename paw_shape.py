@@ -1,12 +1,12 @@
-"""Geometry of the BairView paw print, drawn in the bear logo's language: straight edges, chamfered corners, a notch
-in the top of the pad (like the notch in the bear's head). Upright, toes up, left paw; 400 x 440 units.
+"""Geometry of the BairView paw print, drawn in the bear logo's language: straight edges, chamfered corners, a pointed
+crest at the top of the pad. Upright, toes up, left paw; 400 x 440 units.
 Shared by make_paws.py (SVG for the site) and make_paw_psd.py (layered PSD)."""
 import math
 
 RED = "#850026"  # the red of assets/bear.png (the logo file), not the palette-image red 800E13
 W, H = 400, 440
 
-PAD = [(200, 222), (262, 206), (318, 262), (302, 340), (252, 392), (200, 410), (148, 392), (98, 340), (82, 262), (138, 206)]
+PAD = [(200, 186), (262, 208), (318, 262), (302, 340), (252, 392), (200, 410), (148, 392), (98, 340), (82, 262), (138, 208)]
 # (center x, center y, angle in degrees from straight up, width, height)
 TOES = [(52, 214, -34, 50, 76), (118, 130, -16, 58, 86), (200, 100, 0, 62, 92), (282, 130, 16, 58, 86), (348, 214, 34, 50, 76)]
 
