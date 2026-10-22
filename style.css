@@ -50,11 +50,11 @@ footer { background:rgba(10,10,10,.55); border-top:1px solid var(--line); paddin
 .ext a:hover { color:var(--fg); border-color:var(--brand); }
 .laurels { display:flex; flex-wrap:wrap; gap:8px 20px; align-items:center; }
 .laurels img { height:110px; width:auto; }
-.about { display:grid; grid-template-columns:minmax(220px,340px) 1fr; gap:48px; max-width:1000px; margin:0 auto; align-items:start; }
+.about { display:grid; grid-template-columns:minmax(220px,340px) 1fr; gap:48px 120px; max-width:1000px; margin:0 auto; align-items:start; }
 .about p { margin-bottom:16px; }
 .portrait { width:100%; display:block; }
 .foot-bear { height:36px; width:auto; }
-@media (max-width:700px) { .film-top, .about { grid-template-columns:1fr; } .poster { max-width:220px; } .portrait { max-width:300px; } .laurels img { height:84px; } }
+@media (max-width:700px) { .film-top, .about { grid-template-columns:1fr; } .about { gap:96px; } .poster { max-width:220px; } .portrait { max-width:300px; } .laurels img { height:84px; } }
 .reel { position:fixed; inset:0; z-index:-1; background:#000; }
 .reel video { display:block; width:100%; height:100%; object-fit:cover; }
 .over { background:linear-gradient(to bottom,rgba(10,10,10,.3),rgba(10,10,10,.55)); padding-top:28px; min-height:calc(100vh - 70px); }
@@ -168,16 +168,10 @@ footer { background:rgba(10,10,10,.55); border-top:1px solid var(--line); paddin
 .bts .rail-track { will-change:transform; }
 
 /* About page: a trail of bear tracks (symbols in assets/paws.html, laid out by about.js) in the bear logo's red #850026. The
-   layer sits behind the text; about.js opens a .gap in the text around each print as it lands, so the words flow around it. */
+   layer sits behind the text; about.js walks them down the gap between the photo and the text. */
 .about { position:relative; }
 .paws { position:absolute; top:0; bottom:0; left:50%; width:100vw; margin-left:-50vw; z-index:-1; pointer-events:none; overflow:hidden; }
 .paws svg.paw { position:absolute; fill:#850026; opacity:0; animation:paw-in .6s ease-out var(--d) both; }
 .paws.now svg.paw { animation:none; opacity:1; }
 @keyframes paw-in { from { opacity:0; } to { opacity:1; } }
-.gap { display:inline-block; height:1px; transition:width .55s cubic-bezier(.2,.9,.3,1); }
-@media (prefers-reduced-motion:reduce) { .paws svg.paw { animation:none; opacity:1; } .gap { transition:none; } }
-.w { display:inline-block; }
-.about a.split { border-bottom:0; padding-bottom:0; }
-.about p a.split .w { border-bottom:1px solid var(--accent); }
-.ext a.split .w { border-bottom:1px solid var(--line); padding-bottom:2px; }
-.ext a.split:hover .w { border-color:var(--brand); }
+@media (prefers-reduced-motion:reduce) { .paws svg.paw { animation:none; opacity:1; } }
