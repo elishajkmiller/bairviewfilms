@@ -34,8 +34,8 @@ for ox, oy in ORIGINS:
     if rnd.random() < 0.35:
         base = math.pi - base                         # a few lean the other way
     count = rnd.choice((3, 3, 4))
-    gap = rnd.uniform(15, 24)
-    length = rnd.uniform(230, 400)
+    gap = rnd.uniform(12, 19)
+    length = rnd.uniform(130, 230)
     bend = rnd.uniform(-14, 14)
     nx, ny = -math.sin(base), math.cos(base)
     for k in range(count):
