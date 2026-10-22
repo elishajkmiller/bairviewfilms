@@ -164,7 +164,7 @@ for f in films:
                     f'        <button type="button" class="rail-t" data-i="{i}"{extra if dup else f" aria-label=\"Open still {i}\""}>'
                     f'<img src="../{p}" alt="" loading="lazy"></button>'
                     for i, p in enumerate(shots))
-            reel = f"""<div class="rail film" style="--dur:{len(shots) * 6}s;--avg:{colors.get(slug, "#2a2a2a")}" role="region" aria-label="{esc(f['title'])} stills">
+            reel = f"""<div class="rail film" style="--dur:{len(shots) * 8}s;--avg:{colors.get(slug, "#2a2a2a")}" role="region" aria-label="{esc(f['title'])} stills">
       <div class="rail-track">
 {tiles(False)}
 {tiles(True)}
