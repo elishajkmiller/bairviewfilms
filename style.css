@@ -176,3 +176,4 @@ footer { background:rgba(10,10,10,.55); border-top:1px solid var(--line); paddin
 .paw { opacity:0; animation:paw-in .6s ease-out var(--d) both; }
 @keyframes paw-in { from { opacity:0; } to { opacity:1; } }
 @media (prefers-reduced-motion:reduce) { .paw { animation:none; opacity:1; } }
+.about > div { background:var(--bg); padding:20px 24px; margin:-20px -24px; }
