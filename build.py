@@ -199,16 +199,16 @@ paras = "\n".join(f"    <p>{rich(p)}</p>" for p in c["about"])
 portrait = exists("assets/kaleb.jpg")
 photo = f'<img class="portrait" src="{portrait}" alt="{esc(site["owner"])}">' if portrait else ""
 paws = open("assets/paws.html").read() if os.path.exists("assets/paws.html") else ""
-write("about.html", page("About | Bairview Films", c["about"][0], f"""<div class="paws" aria-hidden="true">
-{paws}</div>
-<section class="wrap about">
+write("about.html", page("About | Bairview Films", c["about"][0], f"""<section class="wrap about">
+  {paws}
   {photo}
-  <div>
+  <div class="about-text">
     <h1>About</h1>
 {paras}
     <p class="facts">{esc(site['owner'])}<br>{esc(site['roles'])}</p>
     <p class="ext">{link_list(site['owner_links'])}</p>
   </div>
+  <script src="about.js" defer></script>
 </section>""", active="about"))
 
 # Behind the scenes: one row per film like the film pages, with its BTS video(s) on the left and a scrolling
