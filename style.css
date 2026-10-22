@@ -192,7 +192,7 @@ main { position:relative; }
 .rail.film .rail-track::before { top:0; }
 .rail.film .rail-track::after { bottom:0; }
 .rail.film .rail-t { width:320px; padding:0 5px; border:0; background:none; }
-.rail.film .rail-t img { box-sizing:border-box; border:2px solid var(--avg,#2a2a2a); background:#111; }
+.rail.film .rail-t img { box-sizing:border-box; border:2px solid var(--brand); background:#111; }
 @media (max-width:700px) {
   .cart { margin:0 auto; width:max-content; }
   .cart { padding-right:12px; } .cart::after { display:none; }
