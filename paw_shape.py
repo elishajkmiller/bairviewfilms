@@ -67,7 +67,7 @@ def pad_pieces(pad, cy=None):
             poly = clip(poly, nx, ny, edges[i] + SLIT_GAP / 2, True)
         if i < 2:
             poly = clip(poly, nx, ny, edges[i + 1] - SLIT_GAP / 2, False)
-        if len(poly) >= 3 and _area(poly) > 500:  # a cut can leave a tiny sliver at the edge: leave it out
+        if len(poly) >= 3 and _area(poly) > 1:  # keep the small slivers a cut leaves at the edge
             pieces.append(poly)
     return pieces
 
