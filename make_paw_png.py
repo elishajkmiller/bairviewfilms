@@ -1,4 +1,4 @@
-"""Write transparent PNGs of the paw print (left and right, with and without claws) into a folder.
+"""Write transparent PNGs of the paw print (left and right) into a folder.
 Needs Pillow:  python3 make_paw_png.py <out folder>   (run from the folder holding paw_shape.py)"""
 import os
 import sys
@@ -12,7 +12,7 @@ size = (W * SCALE, H * SCALE)
 rgb = tuple(int(RED[i:i + 2], 16) for i in (1, 3, 5))
 out = sys.argv[1]
 for side, flip in (("left", False), ("right", True)):
-    for tag, claws in (("", True), ("-no-claws", False)):
+    for tag, claws in (("", True),):
         big = Image.new("L", (size[0] * SS, size[1] * SS), 0)
         dr = ImageDraw.Draw(big)
         for _, poly in shapes(claws):
