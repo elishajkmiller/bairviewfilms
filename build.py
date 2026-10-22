@@ -154,7 +154,7 @@ for f in films:
     row = ""
     if poster or shots:
         ext = f'<p class="ext">{link_list(f["links"])}</p>' if f.get("links") else ""
-        art = (f'<div class="poster-col"><div class="cart"><img class="poster" src="../{poster}" alt="{esc(f["title"])} poster"></div>{ext}</div>'
+        art = (f'<div class="poster-col"><div class="cart"><div class="label"><img class="poster" src="../{poster}" alt="{esc(f["title"])} poster"></div><i class="gloss"></i></div>{ext}</div>'
                if poster else "")
         reel = ""
         if shots:
