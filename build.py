@@ -169,6 +169,7 @@ for f in films:
 {tiles(False)}
 {tiles(True)}
       </div>
+      <i class="gate gate-r" aria-hidden="true"></i>
     </div>"""
         row = f"""<section class="wrap strip">
   <div class="strip-row">
@@ -253,6 +254,7 @@ for s in c.get("bts", {}).get("sections", []):
 {tiles(False)}
 {tiles(True)}
       </div>
+      <i class="gate gate-l" aria-hidden="true"></i><i class="gate gate-r" aria-hidden="true"></i>
     </div>''')
     ext = f'<p class="ext">{link_list(s["links"])}</p>' if s.get("links") else ""
     count = " &middot; ".join(x for x in (
