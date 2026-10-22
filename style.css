@@ -198,8 +198,6 @@ main { position:relative; }
   .cart { padding-right:12px; } .cart::after { display:none; }
   .poster-col + .rail.film { margin:20px 0 0; height:200px; }
   .rail.film .rail-t { width:240px; }
-  .rail.film .rail-track { padding:18px 0; }
-  .rail.film .rail-track::before, .rail.film .rail-track::after { height:18px; background-position:0 -2px; background-size:32px 22px; }
 }
 
 /* Cartridge realism: curved, glossy label, a sheen across the whole body, dust and fine scratches. */
@@ -265,3 +263,7 @@ main { position:relative; }
 .cart .label::after { opacity:.4; }
 .strip-row .cart .poster { filter:contrast(1.02) saturate(.95) brightness(.9); }
 .cart .tag { color:rgba(255,235,225,.5); }
+
+/* a little more room between the red edge lines and the holes: the holes sit 2px further in from each red line */
+.rail.film .rail-track::before { background-position:0 2px; }
+.rail.film .rail-track::after { background-position:0 -2px; }
