@@ -1,27 +1,34 @@
-"""Geometry of the BairView paw print, in the bear logo's language: straight edges and sharp facets. A wide faceted pad
-cut by two claw slashes, five blade-shaped toes fanned over it, and a long curved claw mark above each toe.
-Upright, toes up, left paw. Shared by make_paws.py (SVG for the site), make_paw_psd.py and make_paw_png.py.
-W, H are measured from the drawing, with a margin."""
+"""Geometry of the BairView bear tracks, in the bear logo's language: straight edges and sharp facets.
+FRONT print: wide faceted pad cut by two claw slashes, five blade toes, long curved claw marks.
+HIND print: longer and narrower: a smaller slashed pad, a separate heel pad, shorter claws.
+Upright, toes up, left foot. Shared by make_paws.py (SVG for the site), make_paw_psd.py and make_paw_png.py.
+Width and height of each print are measured from the drawing, with a margin."""
 import math
 
 RED = "#850026"  # the red of assets/bear.png (the logo file), not the palette-image red 800E13
 MARGIN = 10
+SLIT_ANGLE = 17    # degrees from vertical: the cuts lean like "/" on a left foot
+SLIT_AT = (-36, 36)  # offsets of the two cuts from the pad centre, across the cut direction
+SLIT_GAP = 9
+
+# each kind: pad outline, optional heel, toes (center x, center y, angle from straight up, width, height), claw length and width
+KINDS = {
+    "front": dict(
+        pad=[(200, 176), (302, 214), (336, 304), (270, 378), (200, 424), (130, 378), (64, 304), (98, 214)],
+        heel=None,
+        toes=[(40, 216, -36, 50, 90), (115, 124, -16, 58, 104), (200, 94, 0, 62, 110), (285, 124, 16, 58, 104), (360, 216, 36, 50, 90)],
+        claw=(54, 7.5)),
+    "hind": dict(
+        pad=[(200, 196), (284, 226), (314, 290), (266, 352), (200, 382), (134, 352), (86, 290), (116, 226)],
+        heel=[(152, 392), (248, 392), (266, 448), (238, 528), (200, 550), (162, 528), (134, 452)],
+        toes=[(62, 222, -30, 42, 78), (122, 146, -12, 50, 92), (200, 116, 0, 54, 98), (278, 146, 12, 50, 92), (338, 222, 30, 42, 78)],
+        claw=(32, 6)),
+}
 
 
 def rot(x, y, deg):
     a = math.radians(deg)
     return x * math.cos(a) - y * math.sin(a), x * math.sin(a) + y * math.cos(a)
-
-
-# wide shield pad: crest on top, chamfered sides, point at the bottom (like the bear's head outline turned over)
-PAD = [(200, 176), (302, 214), (336, 304), (270, 378), (200, 424), (130, 378), (64, 304), (98, 214)]
-# claw slashes through the pad: two parallel cuts, leaning like "/"
-SLIT_ANGLE = 17    # degrees from vertical
-SLIT_AT = (-36, 36)  # offsets of the two cuts from the pad centre, across the cut direction
-SLIT_GAP = 9
-
-# (center x, center y, angle from straight up, width, height)
-TOES = [(40, 216, -36, 50, 90), (115, 124, -16, 58, 104), (200, 94, 0, 62, 110), (285, 124, 16, 58, 104), (360, 216, 36, 50, 90)]
 
 
 def clip(poly, nx, ny, c, keep_ge):
@@ -40,20 +47,19 @@ def clip(poly, nx, ny, c, keep_ge):
     return out
 
 
-def pad_pieces():
+def pad_pieces(pad):
     a = math.radians(SLIT_ANGLE)
     nx, ny = math.cos(a), math.sin(a)             # across the cuts
-    mid = nx * 200 + ny * 300
-    cuts = [mid + o for o in SLIT_AT]
-    edges = [-1e9] + [c for c in cuts] + [1e9]
+    cy = (min(p[1] for p in pad) + max(p[1] for p in pad)) / 2
+    mid = nx * 200 + ny * cy
+    edges = [-1e9] + [mid + o for o in SLIT_AT] + [1e9]
     pieces = []
     for i in range(3):
-        poly = PAD
-        lo, hi = edges[i], edges[i + 1]
+        poly = pad
         if i > 0:
-            poly = clip(poly, nx, ny, lo + SLIT_GAP / 2, True)
+            poly = clip(poly, nx, ny, edges[i] + SLIT_GAP / 2, True)
         if i < 2:
-            poly = clip(poly, nx, ny, hi - SLIT_GAP / 2, False)
+            poly = clip(poly, nx, ny, edges[i + 1] - SLIT_GAP / 2, False)
         pieces.append(poly)
     return pieces
 
@@ -65,48 +71,55 @@ def toe(cx, cy, ang, w, h):
     return [(cx + rot(x, y, ang)[0], cy + rot(x, y, ang)[1]) for x, y in local]
 
 
-def claw(cx, cy, ang, w, h):
-    """A long curved slash above the toe, sharp at both ends and widest near its start."""
+def claw(cx, cy, ang, w, h, length, width):
+    """A curved slash above the toe, sharp at both ends and widest near its start."""
     n = 18
     base = h / 2 + 9
-    length = 54
-    bend = 7 if ang >= 0 else -7
-    if ang == 0:
-        bend = 5
+    bend = 5 if ang == 0 else (7 if ang > 0 else -7)
     left, right = [], []
     for i in range(n + 1):
         t = i / n
         lx = bend * math.sin(math.pi * t / 2) ** 2
         ly = -(base + length * t)
-        wd = 7.5 * min(1, t * 6) * (1 - t) ** 0.85
+        wd = width * min(1, t * 6) * (1 - t) ** 0.85
         left.append((lx - wd, ly))
         right.append((lx + wd, ly))
     pts = left + right[::-1]
     return [(cx + rot(x, y, ang)[0], cy + rot(x, y, ang)[1]) for x, y in pts]
 
 
-def _raw(with_claws=True):
-    out = [(f"Pad {i + 1}", p) for i, p in enumerate(pad_pieces())]
-    out += [(f"Toe {i + 1}", toe(*t)) for i, t in enumerate(TOES)]
+def _raw(kind, with_claws=True):
+    k = KINDS[kind]
+    out = [(f"Pad {i + 1}", p) for i, p in enumerate(pad_pieces(k["pad"]))]
+    if k["heel"]:
+        out.append(("Heel", k["heel"]))
+    out += [(f"Toe {i + 1}", toe(*t)) for i, t in enumerate(k["toes"])]
     if with_claws:
-        out += [(f"Claw {i + 1}", claw(*t)) for i, t in enumerate(TOES)]
+        out += [(f"Claw {i + 1}", claw(*t, *k["claw"])) for i, t in enumerate(k["toes"])]
     return out
 
 
-_all = [p for _, poly in _raw(True) for p in poly]
-_x0 = min(x for x, _ in _all) - MARGIN
-_y0 = min(y for _, y in _all) - MARGIN
-W = math.ceil(max(x for x, _ in _all) + MARGIN - _x0)
-H = math.ceil(max(y for _, y in _all) + MARGIN - _y0)
+_bounds = {}
+for _kind in KINDS:
+    _pts = [p for _, poly in _raw(_kind) for p in poly]
+    _x0 = min(x for x, _ in _pts) - MARGIN
+    _y0 = min(y for _, y in _pts) - MARGIN
+    _bounds[_kind] = (_x0, _y0, math.ceil(max(x for x, _ in _pts) + MARGIN - _x0), math.ceil(max(y for _, y in _pts) + MARGIN - _y0))
 
 
-def shapes(with_claws=True):
+def dims(kind):
+    """(width, height) of a print."""
+    return _bounds[kind][2], _bounds[kind][3]
+
+
+def shapes(kind="front", with_claws=True):
     """[(name, polygon)] from back to front, moved so the drawing sits inside 0..W, 0..H."""
-    return [(n, [(x - _x0, y - _y0) for x, y in poly]) for n, poly in _raw(with_claws)]
+    x0, y0 = _bounds[kind][:2]
+    return [(n, [(x - x0, y - y0) for x, y in poly]) for n, poly in _raw(kind, with_claws)]
 
 
-def mirrored(poly):
-    return [(W - x, y) for x, y in poly]
+def mirrored(poly, kind="front"):
+    return [(dims(kind)[0] - x, y) for x, y in poly]
 
 
 def d(poly):
