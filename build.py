@@ -232,8 +232,11 @@ for s in c.get("bts", {}).get("sections", []):
                 f'{" class=\"on\"" if i == 0 else ""}>{esc(x.get("label", str(i + 1)))}</button>'
                 for i, x in enumerate(vids)) + "</div>"
         row.append(
-            f'<div class="vid-col"><button type="button" class="vthumb" data-id="{esc(v["id"])}" data-title="{esc(v["title"])}" '
+            f'<div class="vid-col"><div class="monitor"><div class="screen"><button type="button" class="vthumb" data-id="{esc(v["id"])}" data-title="{esc(v["title"])}" '
             f'aria-label="Play {esc(v["title"])}"><img src="https://i.ytimg.com/vi/{esc(v["id"])}/hqdefault.jpg" alt="" loading="lazy"><i></i></button>'
+            f'<span class="ov ov-tr" aria-hidden="true"><b class="rec">REC</b><u class="batt"></u></span>'
+            f'<span class="ov ov-bl tc" aria-hidden="true">00:00:00:00</span></div>'
+            f'<div class="mbar" aria-hidden="true"><span>Bairview &middot; Cam A</span><i class="led"></i></div></div>'
             f'{tabs}<p class="vcap">{esc(v["title"])}</p></div>')
     if shots:
         def tiles(dup):
@@ -245,15 +248,18 @@ for s in c.get("bts", {}).get("sections", []):
                     f'        <button type="button" class="rail-t" data-i="{i}" data-full="{p}"{label}>'
                     f'<img src="assets/bts/thumb/{key}.jpg" alt="" loading="lazy" decoding="async"></button>')
             return "\n".join(out)
-        row.append(f'''<div class="rail" style="--dur:{len(shots) * 6}s;--avg:{colors.get(slug, "#2a2a2a")}" role="region" aria-label="{esc(titles[slug])} behind the scenes photos">
+        row.append(f'''<div class="rail film" style="--dur:{len(shots) * 8}s;--avg:{colors.get(slug, "#2a2a2a")}" role="region" aria-label="{esc(titles[slug])} behind the scenes photos">
       <div class="rail-track">
 {tiles(False)}
 {tiles(True)}
       </div>
     </div>''')
     ext = f'<p class="ext">{link_list(s["links"])}</p>' if s.get("links") else ""
+    count = " &middot; ".join(x for x in (
+        f"{len(vids)} video{'s' if len(vids) != 1 else ''}" if vids else "",
+        f"{len(shots)} photos" if shots else "") if x)
     blocks.append(
-        f'<h2 id="{slug}"><a href="films/{slug}.html">{esc(titles[slug])}</a></h2>\n  <div class="strip-row">\n    ' +
+        f'<h2 id="{slug}" class="slate"><a href="films/{slug}.html">{esc(titles[slug])}</a><span>{count}</span></h2>\n  <div class="strip-row">\n    ' +
         "\n    ".join(row) + f"\n  </div>\n  {ext}")
 more = ""
 if c["bts"].get("playlist"):

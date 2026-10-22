@@ -267,3 +267,40 @@ main { position:relative; }
 /* a little more room between the red edge lines and the holes: the holes sit 2px further in from each red line */
 .rail.film .rail-track::before { background-position:0 2px; }
 .rail.film .rail-track::after { background-position:0 -2px; }
+
+/* BTS page: each video is on a field monitor (bezel, REC light, battery, running timecode, viewfinder corners), each film's
+   heading is a clapperboard slate, and the set photos run on the same film strip as the film pages, in the other direction
+   (right to left), as if feeding into the monitor. */
+.bts h2.slate { position:relative; display:flex; justify-content:space-between; align-items:baseline; gap:16px; flex-wrap:wrap; margin:56px 0 16px; padding:26px 16px 11px;
+  background:#0e0e0e; border:1px solid #2a2a2a; border-radius:3px; color:var(--fg); font-size:.95rem; letter-spacing:.22em; overflow:hidden; }
+.bts h2.slate::before { content:""; position:absolute; left:0; right:0; top:0; height:13px; border-bottom:1px solid #2a2a2a;
+  background:repeating-linear-gradient(-58deg,#d9d9d9 0 15px,#0e0e0e 15px 30px); opacity:.85; }
+.bts h2.slate span { font-size:.66rem; letter-spacing:.2em; color:var(--dim); }
+.bts .strip-row { gap:28px; }
+.monitor { padding:10px 10px 8px; border:1px solid #2c2c2c; border-radius:10px; background:linear-gradient(#1a1a1a,#0d0d0d);
+  box-shadow:0 10px 24px rgba(0,0,0,.6), inset 0 1px 0 rgba(255,255,255,.07); }
+.monitor .screen { position:relative; overflow:hidden; border-radius:3px; box-shadow:0 0 0 2px #000; }
+.monitor .vthumb { width:100%; }
+.monitor .ov { position:absolute; z-index:2; pointer-events:none; font:700 .68rem/1 Arial,Helvetica,sans-serif; letter-spacing:.14em; color:#fff; text-shadow:0 1px 3px rgba(0,0,0,.9); }
+.monitor .ov-tr { top:22px; right:24px; display:flex; align-items:center; gap:12px; }
+.monitor .ov-bl { left:24px; bottom:22px; font-variant-numeric:tabular-nums; letter-spacing:.12em; }
+.monitor .rec { display:flex; align-items:center; gap:6px; font-weight:700; }
+.monitor .rec::before { content:""; width:9px; height:9px; border-radius:50%; background:#d61a1f; box-shadow:0 0 6px rgba(214,26,31,.8); animation:rec-blink 1.6s steps(1) infinite; }
+@keyframes rec-blink { 50% { opacity:.15; } }
+.monitor .batt { position:relative; width:22px; height:10px; border:1.5px solid #fff; border-radius:2px; opacity:.9; }
+.monitor .batt::before { content:""; position:absolute; inset:1.5px 6px 1.5px 1.5px; background:#fff; }
+.monitor .batt::after { content:""; position:absolute; right:-4px; top:2px; width:2px; height:3px; background:#fff; }
+.monitor .screen::after { content:""; position:absolute; inset:9px; z-index:2; pointer-events:none; opacity:.5;
+  background:
+    linear-gradient(#fff,#fff) 0 0 / 16px 1.5px, linear-gradient(#fff,#fff) 0 0 / 1.5px 16px,
+    linear-gradient(#fff,#fff) 100% 0 / 16px 1.5px, linear-gradient(#fff,#fff) 100% 0 / 1.5px 16px,
+    linear-gradient(#fff,#fff) 0 100% / 16px 1.5px, linear-gradient(#fff,#fff) 0 100% / 1.5px 16px,
+    linear-gradient(#fff,#fff) 100% 100% / 16px 1.5px, linear-gradient(#fff,#fff) 100% 100% / 1.5px 16px;
+  background-repeat:no-repeat; }
+.monitor .screen:has(.vthumb.playing)::after, .monitor .screen:has(.vthumb.playing) .ov, .monitor .screen:has(.vthumb.playing) .vthumb i { display:none; }
+.monitor .vthumb i { left:16px; top:16px; }
+.monitor .mbar { display:flex; justify-content:space-between; align-items:center; margin-top:8px; padding:0 2px; font-size:.6rem; letter-spacing:.26em; text-transform:uppercase; color:#6b6b6b; }
+.monitor .led { width:7px; height:7px; border-radius:50%; background:var(--brand); box-shadow:0 0 5px rgba(179,32,31,.7); }
+.bts .rail.film { margin-top:2px; }
+@media (prefers-reduced-motion:reduce) { .monitor .rec::before { animation:none; } }
+@media (max-width:700px) { .bts .rail.film { margin-top:0; } .bts .strip-row { gap:14px; } }

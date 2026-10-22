@@ -36,6 +36,18 @@
     });
   }
 
+  // the monitors' timecode runs at 24 fps from when the page opened
+  var tcs = document.querySelectorAll(".tc");
+  var calm = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  function two(v) { return (v < 10 ? "0" : "") + v; }
+  if (tcs.length && !calm) {
+    setInterval(function () {
+      var f = Math.floor(performance.now() / 1000 * 24), s = Math.floor(f / 24), txt, i;
+      txt = two(Math.floor(s / 3600) % 100) + ":" + two(Math.floor(s / 60) % 60) + ":" + two(s % 60) + ":" + two(f % 24);
+      for (i = 0; i < tcs.length; i++) { tcs[i].textContent = txt; }
+    }, 83);
+  }
+
   var rails = document.querySelectorAll(".rail");
   if (!rails.length) { return; }
   // strips that are off screen stand still, so only the ones in view are animating
