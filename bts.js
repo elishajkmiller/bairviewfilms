@@ -1,5 +1,16 @@
 /* BTS photo walls: click a photo to open it full screen; arrows and keys move through that film's photos. */
 (function () {
+  var vgrid = document.querySelector(".vgrid");
+  if (vgrid) {
+    vgrid.addEventListener("click", function (e) {
+      var b = e.target.closest(".vcard");
+      if (!b) { return; }
+      var box = b.querySelector(".vthumb");
+      box.innerHTML = '<iframe src="https://www.youtube-nocookie.com/embed/' + b.getAttribute("data-id") +
+        '?autoplay=1" title="' + b.getAttribute("data-title") + '" allow="autoplay; fullscreen" allowfullscreen></iframe>';
+      b.classList.add("playing");
+    });
+  }
   var grids = document.querySelectorAll(".bts-grid");
   if (!grids.length) { return; }
   var lb = document.createElement("div");

@@ -139,3 +139,16 @@ footer { background:rgba(10,10,10,.55); border-top:1px solid var(--line); paddin
   nav { gap:10px; }
   nav a { font-size:.64rem; letter-spacing:.06em; }
 }
+
+.vgrid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:20px; }
+.vcard { display:block; padding:0; border:0; background:none; color:inherit; font:inherit; text-align:left; cursor:pointer; }
+.vthumb { position:relative; display:block; aspect-ratio:16/9; background:#111; overflow:hidden; }
+.vthumb img, .vthumb iframe { width:100%; height:100%; object-fit:cover; display:block; border:0; transition:opacity .2s; }
+.vcard:hover .vthumb img { opacity:.8; }
+.vthumb i { position:absolute; left:12px; bottom:12px; width:40px; height:40px; border-radius:50%; background:rgba(10,10,10,.7); border:2px solid var(--fg); }
+.vthumb i::after { content:""; position:absolute; left:15px; top:10px; border-left:12px solid var(--fg); border-top:8px solid transparent; border-bottom:8px solid transparent; }
+.vcard:hover .vthumb i { background:var(--brand); }
+.vcard:focus-visible { outline:3px solid var(--accent); outline-offset:3px; }
+.vt { display:block; margin-top:10px; font-size:.9rem; line-height:1.4; }
+.vcard.playing { cursor:default; }
+.bts .vgrid + .ext { margin-top:16px; }

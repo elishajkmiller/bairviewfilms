@@ -236,9 +236,15 @@ for s in c.get("bts", {}).get("sections", []):
     blocks.append(
         f'<h2 id="{slug}"><a href="films/{slug}.html">{esc(titles[slug])}</a></h2>\n  ' + "\n  ".join(inner))
 playlist = ""
-if c["bts"].get("playlist"):
-    playlist = (f'<div class="video"><iframe src="https://www.youtube-nocookie.com/embed/videoseries?list={esc(c["bts"]["playlist"])}" '
-                f'title="Behind the scenes playlist" loading="lazy" allowfullscreen></iframe></div>')
+if c["bts"].get("videos"):
+    cards = "\n".join(
+        f'    <button type="button" class="vcard" data-id="{esc(v["id"])}" data-title="{esc(v["title"])}">'
+        f'<span class="vthumb"><img src="https://i.ytimg.com/vi/{esc(v["id"])}/hqdefault.jpg" alt="" loading="lazy"><i></i></span>'
+        f'<span class="vt">{esc(v["title"])}</span></button>'
+        for v in c["bts"]["videos"])
+    more = (f'<p class="ext"><a href="https://www.youtube.com/playlist?list={esc(c["bts"]["playlist"])}" rel="noopener">'
+            "Full playlist on YouTube</a></p>") if c["bts"].get("playlist") else ""
+    playlist = f'<h2>Videos</h2>\n  <div class="vgrid">\n{cards}\n  </div>\n  {more}'
 write("bts.html", page("Behind the Scenes | Bairview Films", c["bts"]["intro"], f"""<section class="wrap bts">
   <h1>Behind the Scenes</h1>
   <p class="lead">{esc(c["bts"]["intro"])}</p>
