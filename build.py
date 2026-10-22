@@ -234,7 +234,7 @@ for s in c.get("bts", {}).get("sections", []):
                 for i, x in enumerate(vids)) + "</div>"
         row.append(
             f'<div class="vid-col"><div class="monitor"><div class="screen"><button type="button" class="vthumb" data-id="{esc(v["id"])}" data-title="{esc(v["title"])}" '
-            f'aria-label="Play {esc(v["title"])}"><img src="https://i.ytimg.com/vi/{esc(v["id"])}/hqdefault.jpg" alt="" loading="lazy"><i></i></button>'
+            f'aria-label="Play {esc(v["title"])}"><img src="{esc(v.get("thumb") or "https://i.ytimg.com/vi/" + v["id"] + "/hqdefault.jpg")}" alt="" loading="lazy"><i></i></button>'
             f'<span class="ov ov-tr" aria-hidden="true"><b class="rec">REC</b><u class="batt"></u></span>'
             f'<span class="ov ov-bl tc" aria-hidden="true">00:00:00:00</span></div>'
             f'<div class="mbar" aria-hidden="true"><span>Bairview &middot; Cam A</span><i class="led"></i></div></div>'
