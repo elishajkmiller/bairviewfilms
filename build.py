@@ -258,7 +258,6 @@ if c["bts"].get("playlist"):
             "Full playlist on YouTube</a></p>")
 write("bts.html", page("Behind the Scenes | Bairview Films", c["bts"]["intro"], f"""<section class="wrap bts">
   <h1>Behind the Scenes</h1>
-  <p class="lead">{esc(c["bts"]["intro"])}</p>
   {more}
   {chr(10).join(blocks)}
   <script src="bts.js" defer></script>
