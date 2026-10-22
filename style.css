@@ -169,7 +169,7 @@ footer { background:rgba(10,10,10,.55); border-top:1px solid var(--line); paddin
 
 /* About page: a trail of bear tracks (symbols in assets/paws.html, laid out by about.js) in the bear logo's red #850026. The
    layer sits behind the text; about.js walks them down the gap between the photo and the text. */
-.about { position:relative; }
+main { position:relative; }
 .paws { position:absolute; top:0; bottom:0; left:50%; width:100vw; margin-left:-50vw; z-index:-1; pointer-events:none; overflow:hidden; }
 .paws svg.paw { position:absolute; fill:#850026; opacity:0; animation:paw-in .6s ease-out var(--d) both; }
 .paws.now svg.paw { animation:none; opacity:1; }

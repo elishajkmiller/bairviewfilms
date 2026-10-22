@@ -1,4 +1,4 @@
-/* About page: a trail of bear tracks walks down the gap between the photo and the text (across, when the page is one
+/* About page: a trail of bear tracks walks down the gap between the photo and the text, the full height of the page (across, when the page is one
    column and the photo sits above the text). The trail is laid out from the measured positions of the photo and the
    text, so it works at any width; the prints fade in one after another and then stay. */
 (function () {
@@ -16,7 +16,8 @@
   var layer = document.createElement("div");
   layer.className = "paws";
   layer.setAttribute("aria-hidden", "true");
-  sec.appendChild(layer);
+  var main = document.querySelector("main") || sec;
+  main.appendChild(layer);
 
   // doc-space start and end of the walk, and the width of the lane the bear has
   function lane() {
@@ -26,7 +27,8 @@
     var p = photo.getBoundingClientRect();
     if (t.left >= p.right - 1) {
       var gx = (p.right + t.left) / 2 + sx;
-      return { a: [gx, t.top + sy], b: [gx, t.bottom + sy], w: t.left - p.right };
+      var m = main.getBoundingClientRect();   // the walk runs the whole height of the page, header to footer
+      return { a: [gx, m.top + sy], b: [gx, m.bottom + sy], w: t.left - p.right };
     }
     var gy = (p.bottom + t.top) / 2 + sy;
     return { a: [p.left + sx, gy], b: [Math.max(t.right, p.right) + sx, gy], w: t.top - p.bottom };
@@ -38,9 +40,13 @@
     var dx = ln.b[0] - ln.a[0], dy = ln.b[1] - ln.a[1], len = Math.hypot(dx, dy);
     var ux = dx / len, uy = dy / len;
     var ang = Math.atan2(ux, -uy) * 180 / Math.PI, rad = ang * Math.PI /  180;
-    var out = [], pos = behind + size * 0.5, k = 0;
-    while (pos < len - size * 1.2) {
-      var right = k % 2, off = right ? side : -side;
+    // spread whole steps evenly so the last print lands near the end of the lane
+    var first = behind + size * 0.6, avail = len - first - size * 0.6;
+    var steps = Math.max(0, Math.round(avail / stride));
+    if (steps) { stride = avail / steps; }
+    var out = [], k;
+    for (k = 0; k <= steps; k++) {
+      var pos = first + k * stride, right = k % 2, off = right ? side : -side;
       [["front", 0], ["hind", behind]].forEach(function (kb) {
         var d = kb[0] === "front" ? FRONT : HIND, sc = size / FRONT[1], at = pos - kb[1];
         out.push({
@@ -48,8 +54,6 @@
           x: ln.a[0] + ux * at + Math.cos(rad) * off, y: ln.a[1] + uy * at + Math.sin(rad) * off
         });
       });
-      pos += stride;
-      k++;
     }
     return out;
   }
