@@ -202,11 +202,9 @@ main { position:relative; }
   .rail.film .rail-track::before, .rail.film .rail-track::after { height:18px; background-position:0 -2px; background-size:32px 22px; }
 }
 
-/* Cartridge realism: curved, glossy label, a sheen across the whole body, dust and fine scratches, two screws. */
+/* Cartridge realism: curved, glossy label, a sheen across the whole body, dust and fine scratches. */
 .cart { border-radius:24px 12px 12px 24px;
   background:
-    radial-gradient(circle at 35% 30%, #8a8a8a 0, #3a3a3a 55%, #0f0f0f 100%) calc(100% - 20px) 9px / 10px 10px no-repeat,
-    radial-gradient(circle at 35% 30%, #8a8a8a 0, #3a3a3a 55%, #0f0f0f 100%) calc(100% - 20px) calc(100% - 9px) / 10px 10px no-repeat,
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='400'%3E%3Cfilter id='d' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='2' seed='11'/%3E%3CfeColorMatrix values='0 0 0 0 .92 0 0 0 0 .9 0 0 0 0 .85 0 0 0 10 -8.1'/%3E%3C/filter%3E%3Crect width='300' height='400' filter='url%28%23d%29' opacity='.55'/%3E%3Cg fill='none' stroke='%23fff' stroke-linecap='round'%3E%3Cpath d='M22 70 L96 41' stroke-width='.7' opacity='.22'/%3E%3Cpath d='M180 330 L271 301' stroke-width='.6' opacity='.18'/%3E%3Cpath d='M240 60 Q252 90 247 128' stroke-width='.5' opacity='.2'/%3E%3Cpath d='M40 250 Q70 262 118 258' stroke-width='.6' opacity='.16'/%3E%3Cpath d='M150 150 L156 148' stroke-width='1.4' opacity='.3'/%3E%3C/g%3E%3C/svg%3E") 0 0 / 300px 400px,
     linear-gradient(160deg,#b3201f,#7a0c12 50%,#5c080d);
   box-shadow:0 14px 26px rgba(0,0,0,.65), 0 2px 3px rgba(0,0,0,.8), inset 0 2px 0 rgba(255,255,255,.2), inset 2px 0 3px rgba(255,255,255,.08), inset 0 -4px 8px rgba(0,0,0,.7), inset -3px 0 6px rgba(0,0,0,.5); }
@@ -222,7 +220,6 @@ main { position:relative; }
     linear-gradient(180deg, rgba(0,0,0,.3), rgba(0,0,0,0) 13%, rgba(0,0,0,0) 86%, rgba(0,0,0,.42)); }
 .cart .gloss { position:absolute; inset:0; z-index:3; pointer-events:none; border-radius:inherit;
   background:linear-gradient(112deg, rgba(255,255,255,.2) 0, rgba(255,255,255,.05) 14%, rgba(255,255,255,0) 28%, rgba(255,255,255,0) 72%, rgba(255,255,255,.09) 88%, rgba(255,255,255,.02) 100%); }
-@media (max-width:700px) { .cart { background-position:calc(100% - 20px) 9px, calc(100% - 20px) calc(100% - 9px), 0 0, 0 0; } }
 
 /* Cartridge in the Bairview red, squarer like a real Super 8 cartridge: ridged grip down the left, a hub window and a stock
    line on the bottom edge, a black recess around the label. */
